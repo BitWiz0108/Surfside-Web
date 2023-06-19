@@ -5,12 +5,31 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
-
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container-fluid">
+            <div class='dashboard'>
+                <div class="dashboard-nav">
+                    <header>
+                        <a href="#!" class="menu-toggle"><i class="fas fa-bars"></i></a>
+                        <div class="text-warning fs-1"><i class="fas fa-heart"></i> 
+                        <span>Clean</span></div>
+                    </header>
+                    {{ include('_includes/sidemenu.html.twig') }}
+                </div>
+                <div class='dashboard-app'>
+                    <header class='dashboard-toolbar'><a href="#!" class="menu-toggle"><i class="fas fa-bars"></i></a></header>
+                    <div class='dashboard-content'>
+                        <div class='container-fluid'>
+                            {% block body %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
     </body>
 </html>

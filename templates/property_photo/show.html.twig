@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PropertyPhoto{% endblock %}
+
+{% block body %}
+    <h1>PropertyPhoto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ property_photo.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ property_photo.title }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ property_photo.url }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ property_photo.created ? property_photo.created|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Modified</th>
+                <td>{{ property_photo.modified ? property_photo.modified|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_property_photo_index') }}">back to list</a>
+
+    <a href="{{ path('app_property_photo_edit', {'id': property_photo.id}) }}">edit</a>
+
+    {{ include('property_photo/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+{% block title %}Supplies{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+                <h4>Supplies</h4>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_supply_new') }}" class="btn btn-primary btn-sm">Create New</a>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <table class="table table-striped table-hover border border-2">
+                    <thead>
+                        <tr>
+                            <th>Id <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'id' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/supply/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Name <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'name' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/supply/?currentpage={{ currentpage }}&sortfield=name&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Units <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'units' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/supply/?currentpage={{ currentpage }}&sortfield=units&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Units Measurement <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'units_measurement' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/supply/?currentpage={{ currentpage }}&sortfield=units_measurement&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Created <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'created' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/supply/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Modified <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'modified' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/supply/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/supply/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for supply in supplies %}
+                        <tr>
+                            <td>{{ supply.id }}</td>
+                            <td>{{ supply.name }}</td>
+                            <td>{{ supply.units }}</td>
+                            <td>{{ supply.unitsMeasurement }}</td>
+                            <td>{{ supply.created ? supply.created|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>{{ supply.modified ? supply.modified|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="text-end">
+                                <a href="{{ path('app_supply_show', {'id': supply.id}) }}">show</a> | 
+                                <a href="{{ path('app_supply_edit', {'id': supply.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-danger">No records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <nav aria-label="..." class="float-end">
+                                    <ul class="pagination">
+                                        <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">
+                                            <a class="page-link" href="/supply/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Previous</a>
+                                        </li>
+                                        {% for i in 1..numberpages %}
+                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/supply/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">{{ i }}</a></li>
+                                        {% endfor %}
+                                        <li class="page-item {% if numberpages == 1 or currentpage == numberpages %} disabled{% endif %}" >
+                                            <a class="page-link" href="/supply/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

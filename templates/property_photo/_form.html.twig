@@ -1,0 +1,30 @@
+{{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="row my-2">
+            <div class="col-12">
+                <div class="text-danger">
+                    <small>{{ form_errors(form) }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.file) }}
+                {{ form_widget(form.file) }}
+                <small>{{ form_help(form.file) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                <small>{{ form_help(form.title) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 text-end">
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

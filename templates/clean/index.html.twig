@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clean index{% endblock %}
+
+{% block body %}
+    <h1>Clean index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Scheduled</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Notes</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for clean in cleans %}
+            <tr>
+                <td>{{ clean.id }}</td>
+                <td>{{ clean.scheduled ? clean.scheduled|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ clean.start ? clean.start|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ clean.end ? clean.end|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ clean.notes }}</td>
+                <td>{{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_clean_show', {'id': clean.id}) }}">show</a>
+                    <a href="{{ path('app_clean_edit', {'id': clean.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clean_new') }}">Create new</a>
+{% endblock %}

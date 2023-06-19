@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+{% block title %}Property{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_property_edit', {'id': property.id}) }}" class="btn btn-primary btn-sm">Edit</a> <a href="{{ path('app_property_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header text-start">Details ({{ property.id }})</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                {{ property.title }}<br>
+                                {{ property.address }}<br>
+                                {{ property.city }}, {{ property.state }} {{ property.postalcode }}<br>
+                                {{ property.latitude }} : {{ property.longitude }}<br>
+                                <strong>Sq. Ft.</strong> {{ property.squareFeet }}
+                            </div>
+                            <div class="col-6">
+                                <strong>Bedrooms</strong> {{ property.bedrooms }}<br>
+                                <strong>Bathrooms</strong> {{ property.bathrooms }}<br>
+                                <strong>Kings</strong> {{ property.kings }}<br>
+                                <strong>Queens</strong> {{ property.queens }}<br>
+                                <strong>Twins</strong> {{ property.twins }}<br>
+                                <strong>Towls</strong> {{ property.towels }}<br>
+                                <strong>Hand Towels</strong> {{ property.handTowels }}<br>
+                                <strong>Wash Cloths</strong> {{ property.washCloths }}<br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>Door Code</strong> {{ property.doorCode }}<br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>Instructions</strong> {{ property.instructions }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header text-start">
+                        <div class="row">
+                            <div class="col-6">Property Photos</div>
+                            <div class="col-6 text-end">
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newPropertyPhotoModal">New Photo</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% if property.getPropertyPhotos()|length > 0 %}
+                                {% for photo in property.getPropertyPhotos() %}
+                                    <div class="col text-center">
+                                        <img src="{{ asset(photo.url) }}" style="height:200px;" class="border border-"><br>
+                                        <span class="fst-italic">{{ photo.title }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <span class="text-danger fst-italic">No photos fournd for this property.</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="newPropertyPhotoModal" tabindex="-1" aria-labelledby="newPropertyPhotoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newPropertyPhotoModalLabel">New Property Photo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {{ include('property_photo/_form.html.twig') }}
+          </div>
+        </div>
+      </div>
+    </div>    
+    {{ include('property/_delete_form.html.twig') }}
+{% endblock %}

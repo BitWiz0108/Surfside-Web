@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit Customer{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+                <h4>Edit Customer</h4>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_customer_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                <strong>User:</strong> {{ customer.getUser().getEmail() }}
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                {{ include('customer/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

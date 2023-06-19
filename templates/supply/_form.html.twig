@@ -1,0 +1,33 @@
+{{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_errors(form) }}
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+                <small>{{ form_help(form.name) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-6">
+                {{ form_label(form.units) }}
+                {{ form_widget(form.units) }}
+                <small>{{ form_help(form.units) }}</small>
+            </div>
+            <div class="col-6">
+                {{ form_label(form.units_measurement) }}
+                {{ form_widget(form.units_measurement) }}
+                <small>{{ form_help(form.units_measurement) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 text-end">
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

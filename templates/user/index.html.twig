@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+{% block title %}Users{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6"><h4>Users</h4></div>
+            <div class="col-6 text-end"><a href="{{ path('app_user_new') }}" class="btn btn-primary btn-sm">New User</a></div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <table class="table table-striped table-hover border border-2">
+                    <thead>
+                        <tr>
+                            <th>Id <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'id' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/user/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/user/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/user/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Email <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'email' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/user/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/user/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/user/?currentpage={{ currentpage }}&sortfield=email&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Roles <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'roles' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/user/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/user/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/user/?currentpage={{ currentpage }}&sortfield=roles&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                            <td class="text-end">
+                                <a href="{{ path('app_user_show', {'id': user.id}) }}" title="View Details">view</a> | 
+                                <a href="{{ path('app_user_edit', {'id': user.id}) }}" title="Edit">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-danger">No records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <nav aria-label="..." class="float-end">
+                                    <ul class="pagination">
+                                        <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">
+                                            <a class="page-link" href="/user/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Previous</a>
+                                        </li>
+                                        {% for i in 1..numberpages %}
+                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/user/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">{{ i }}</a></li>
+                                        {% endfor %}
+                                        <li class="page-item {% if numberpages == 1 or currentpage == numberpages %} disabled{% endif %}" >
+                                            <a class="page-link" href="/user/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    
+{% endblock %}

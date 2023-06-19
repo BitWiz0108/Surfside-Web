@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clean{% endblock %}
+
+{% block body %}
+    <h1>Clean</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ clean.id }}</td>
+            </tr>
+            <tr>
+                <th>Scheduled</th>
+                <td>{{ clean.scheduled ? clean.scheduled|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Start</th>
+                <td>{{ clean.start ? clean.start|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>End</th>
+                <td>{{ clean.end ? clean.end|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>{{ clean.notes }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Modified</th>
+                <td>{{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clean_index') }}">back to list</a>
+
+    <a href="{{ path('app_clean_edit', {'id': clean.id}) }}">edit</a>
+
+    {{ include('clean/_delete_form.html.twig') }}
+{% endblock %}

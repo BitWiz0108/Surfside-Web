@@ -1,0 +1,134 @@
+{{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="row my-2">
+            <div class="col-12">
+                <div class="text-danger">
+                    <small>{{ form_errors(form) }}</small>
+                </div>
+            </div>
+        </div>
+        {% if button_label == 'Save' %}
+            <div class="row my-2">
+                <div class="col-12">
+                    {{ form_label(form.customer) }}
+                    {{ form_widget(form.customer) }}
+                    <small>{{ form_help(form.customer) }}</small>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                <small>{{ form_help(form.title) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.address) }}
+                {{ form_widget(form.address) }}
+                <small>{{ form_help(form.address) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-6">
+                {{ form_label(form.city) }}
+                {{ form_widget(form.city) }}
+                <small>{{ form_help(form.city) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.state) }}
+                {{ form_widget(form.state) }}
+                <small>{{ form_help(form.state) }}</small>
+            </div>
+            <div class="col-2">
+                {{ form_label(form.postalcode) }}
+                {{ form_widget(form.postalcode) }}
+                <small>{{ form_help(form.postalcode) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-4">
+                {{ form_label(form.square_feet) }}
+                {{ form_widget(form.square_feet) }}
+                <small>{{ form_help(form.square_feet) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.bedrooms) }}
+                {{ form_widget(form.bedrooms) }}
+                <small>{{ form_help(form.bedrooms) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.bathrooms) }}
+                {{ form_widget(form.bathrooms) }}
+                <small>{{ form_help(form.bathrooms) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-6">
+                {{ form_label(form.latitude) }}
+                {{ form_widget(form.latitude) }}
+                <small>{{ form_help(form.latitude) }}</small>
+            </div>
+            <div class="col-6">
+                {{ form_label(form.longitude) }}
+                {{ form_widget(form.longitude) }}
+                <small>{{ form_help(form.longitude) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-4">
+                {{ form_label(form.twins) }}
+                {{ form_widget(form.twins) }}
+                <small>{{ form_help(form.twins) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.queens) }}
+                {{ form_widget(form.queens) }}
+                <small>{{ form_help(form.queens) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.kings) }}
+                {{ form_widget(form.kings) }}
+                <small>{{ form_help(form.kings) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-4">
+                {{ form_label(form.hand_towels) }}
+                {{ form_widget(form.hand_towels) }}
+                <small>{{ form_help(form.hand_towels) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.towels) }}
+                {{ form_widget(form.towels) }}
+                <small>{{ form_help(form.towels) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.wash_cloths) }}
+                {{ form_widget(form.wash_cloths) }}
+                <small>{{ form_help(form.wash_cloths) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.instructions) }}
+                {{ form_widget(form.instructions) }}
+                <small>{{ form_help(form.instructions) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-3">
+                {{ form_label(form.door_code) }}
+                {{ form_widget(form.door_code) }}
+                <small>{{ form_help(form.door_code) }}</small>
+            </div>
+            <div class="col-9"></div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 text-end">
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CleanPhoto{% endblock %}
+
+{% block body %}
+    <h1>CleanPhoto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ clean_photo.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ clean_photo.title }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ clean_photo.url }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ clean_photo.created ? clean_photo.created|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Modified</th>
+                <td>{{ clean_photo.modified ? clean_photo.modified|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clean_photo_index') }}">back to list</a>
+
+    <a href="{{ path('app_clean_photo_edit', {'id': clean_photo.id}) }}">edit</a>
+
+    {{ include('clean_photo/_delete_form.html.twig') }}
+{% endblock %}

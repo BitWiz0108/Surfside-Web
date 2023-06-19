@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% block title %}Linens{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+                <h4>Linens</h4>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_linen_new') }}" class="btn btn-primary btn-sm">Create New</a>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <table class="table table-striped table-hover border border-2">
+                    <thead>
+                        <tr>
+                            <th>Id <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'id' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Name <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'name' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=name&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Units <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'units' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=units&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Created <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'created' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th>Modified <span clsas="text-blue fw-bold">
+                                {% if sortfield == 'modified' %} 
+                                    {% if sortdirection == 'ASC' %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                    {% else %}
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                    {% endif %}
+                                {% else %} 
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                {% endif %}
+                                </span>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for linen in linens %}
+                        <tr>
+                            <td>{{ linen.id }}</td>
+                            <td>{{ linen.name }}</td>
+                            <td>{{ linen.units }}</td>
+                            <td>{{ linen.created ? linen.created|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>{{ linen.modified ? linen.modified|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="text-end">
+                                <a href="{{ path('app_linen_show', {'id': linen.id}) }}">show</a> | 
+                                <a href="{{ path('app_linen_edit', {'id': linen.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-danger">No records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <nav aria-label="..." class="float-end">
+                                    <ul class="pagination">
+                                        <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">
+                                            <a class="page-link" href="/linen/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Previous</a>
+                                        </li>
+                                        {% for i in 1..numberpages %}
+                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/linen/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">{{ i }}</a></li>
+                                        {% endfor %}
+                                        <li class="page-item {% if numberpages == 1 or currentpage == numberpages %} disabled{% endif %}" >
+                                            <a class="page-link" href="/linen/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

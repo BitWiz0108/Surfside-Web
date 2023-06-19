@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PropertyPhoto index{% endblock %}
+
+{% block body %}
+    <h1>PropertyPhoto index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Url</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for property_photo in property_photos %}
+            <tr>
+                <td>{{ property_photo.id }}</td>
+                <td>{{ property_photo.title }}</td>
+                <td>{{ property_photo.url }}</td>
+                <td>{{ property_photo.created ? property_photo.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ property_photo.modified ? property_photo.modified|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_property_photo_show', {'id': property_photo.id}) }}">show</a>
+                    <a href="{{ path('app_property_photo_edit', {'id': property_photo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_property_photo_new') }}">Create new</a>
+{% endblock %}

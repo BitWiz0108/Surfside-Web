@@ -1,0 +1,15 @@
+<nav class="dashboard-nav-list">
+    <a href="{{ url('app_user_index') }}" class="dashboard-nav-item"><i class="fas fa-user"></i>&nbsp;&nbsp;Users</a>
+    <a href="{{ url('app_customer_index') }}" class="dashboard-nav-item"><i class="fas fa-users"></i>&nbsp;&nbsp;Customers</a>
+    <a href="{{ url('app_housekeeper_index') }}" class="dashboard-nav-item"><i class="fas fa-broom"></i>&nbsp;&nbsp;Housekeepers</a>
+    <a href="{{ url('app_property_index') }}" class="dashboard-nav-item"><i class="fas fa-house"></i>&nbsp;&nbsp;Properties</a>
+    <div class='dashboard-nav-dropdown'>
+        <a href="#!" class="dashboard-nav-item dashboard-nav-dropdown-toggle"><i class="fas fa-boxes"></i></i>&nbsp;&nbsp;Inventory </a>
+        <div class='dashboard-nav-dropdown-menu'>
+            <a href="{{ url('app_supply_index') }}" class="dashboard-nav-dropdown-item"><i class="fas fa-box-open"></i>&nbsp;&nbsp;Supplies</a>
+            <a href="{{ url('app_linen_index') }}" class="dashboard-nav-dropdown-item"><i class="fas fa-bed"></i>&nbsp;&nbsp;Linen</a>
+        </div>
+    </div>
+    <div class="nav-item-divider"></div>
+    <a href="{{ url('app_logout') }}" class="dashboard-nav-item"><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout</a>
+</nav>

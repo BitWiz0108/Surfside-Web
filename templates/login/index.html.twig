@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+        <title>{% block title %}Login{% endblock %}</title>
+    </head>
+    <body>
+    {% block body %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4 text-center m-4 p-4">
+                    <span class="text-warning fs-1"><i class="fas fa-broom fa-lg"></i></span> <span class="fs-1">Clean</span>
+                    <br><br>
+                    <h4>Login</h4>
+                    <br>
+                    {% if error %}
+                        <div class="p-4 text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                    <form action="{{ path('app_login') }}" method="post">
+                        <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control my-2" placeholder="Email">
+                        <input type="password" id="password" name="_password" class="form-control my-2" placeholder="Password">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <input type="hidden" name="_target_path" value="/user">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+    {% endblock %}
+    </body>
+</html>

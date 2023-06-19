@@ -1,0 +1,29 @@
+{{ form_start(form) }}
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-12">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            <small>{{ form_help(form.email) }}</small>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-12">
+            {{ form_label(form.roles) }}
+            {{ form_widget(form.roles) }}
+            <small>{{ form_help(form.roles) }}</small>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-12">
+            {{ form_widget(form.password) }}
+            <small>{{ form_help(form.password) }}</small>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-12 text-end">
+            <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

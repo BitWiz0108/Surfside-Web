@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CleanPhoto index{% endblock %}
+
+{% block body %}
+    <h1>CleanPhoto index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Url</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for clean_photo in clean_photos %}
+            <tr>
+                <td>{{ clean_photo.id }}</td>
+                <td>{{ clean_photo.title }}</td>
+                <td>{{ clean_photo.url }}</td>
+                <td>{{ clean_photo.created ? clean_photo.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ clean_photo.modified ? clean_photo.modified|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_clean_photo_show', {'id': clean_photo.id}) }}">show</a>
+                    <a href="{{ path('app_clean_photo_edit', {'id': clean_photo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clean_photo_new') }}">Create new</a>
+{% endblock %}

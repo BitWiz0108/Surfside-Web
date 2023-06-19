@@ -1,0 +1,70 @@
+{{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="row my-2">
+            <div class="col-12">
+                <div class="text-danger">
+                    <small>{{ form_errors(form) }}</small>
+                </div>
+            </div>
+        </div>
+        {% if button_label == 'Save' %}
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.user) }}
+                {{ form_widget(form.user) }}
+                <small>Create a user to assign as this housekeeper <a href="/user/new">here</a>.</small>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.employee_id) }}
+                {{ form_widget(form.employee_id) }}
+                <small>{{ form_help(form.employee_id) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.first_name) }}
+                {{ form_widget(form.first_name) }}
+                <small>{{ form_help(form.first_name) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.last_name) }}
+                {{ form_widget(form.last_name) }}
+                <small>{{ form_help(form.last_name) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.address) }}
+                {{ form_widget(form.address) }}
+                <small>{{ form_help(form.address) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-6">
+                {{ form_label(form.city) }}
+                {{ form_widget(form.city) }}
+                <small>{{ form_help(form.city) }}</small>
+            </div>
+            <div class="col-4">
+                {{ form_label(form.state) }}
+                {{ form_widget(form.state) }}
+                <small>{{ form_help(form.state) }}</small>
+            </div>
+            <div class="col-2">
+                {{ form_label(form.postalcode) }}
+                {{ form_widget(form.postalcode) }}
+                <small>{{ form_help(form.postalcode) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 text-end">
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

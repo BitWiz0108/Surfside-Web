@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block title %}Housekeeper{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+                <h4>Housekeeper</h4>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_housekeeper_edit', {'id': housekeeper.id}) }}" class="btn btn-primary btn-sm">Edit</a> 
+                <a href="{{ path('app_housekeeper_index') }}" class="btn btn-secondary btn-sm">Back to list</a>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ housekeeper.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>First_name</th>
+                            <td>{{ housekeeper.firstName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last_name</th>
+                            <td>{{ housekeeper.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ housekeeper.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td>{{ housekeeper.city }}</td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td>{{ housekeeper.state }}</td>
+                        </tr>
+                        <tr>
+                            <th>Postalcode</th>
+                            <td>{{ housekeeper.postalcode }}</td>
+                        </tr>
+                        <tr>
+                            <th>Created</th>
+                            <td>{{ housekeeper.created ? housekeeper.created|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Modified</th>
+                            <td>{{ housekeeper.modified ? housekeeper.modified|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Employee_id</th>
+                            <td>{{ housekeeper.employeeId }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{ include('housekeeper/_delete_form.html.twig') }}
+{% endblock %}
