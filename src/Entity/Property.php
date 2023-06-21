@@ -79,10 +79,21 @@ class Property
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Clean::class)]
     private Collection $cleans;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $created = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $modified = null;
+
     public function __construct()
     {
         $this->propertyPhotos = new ArrayCollection();
         $this->cleans = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     public function getId(): ?int
@@ -374,6 +385,30 @@ class Property
                 $clean->setProperty(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(?\DateTimeInterface $created): static
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getModified(): ?\DateTimeInterface
+    {
+        return $this->modified;
+    }
+
+    public function setModified(?\DateTimeInterface $modified): static
+    {
+        $this->modified = $modified;
 
         return $this;
     }

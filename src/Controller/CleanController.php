@@ -3,21 +3,49 @@
 namespace App\Controller;
 
 use App\Entity\Clean;
+use App\Entity\CleanHousekeeper;
+use App\Entity\CleanLinen;
+use App\Entity\CleanPhoto;
+use App\Entity\CleanSupply;
 use App\Form\CleanType;
+use App\Form\CleanLinenType;
+use App\Form\CleanPhotoType;
+use App\Form\CleanSupplyType;
 use App\Repository\CleanRepository;
+use App\Repository\CleanHousekeeperRepository;
+use App\Repository\CleanLinenRepository;
+use App\Repository\CleanPhotoRepository;
+use App\Repository\CleanSupplyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/clean')]
 class CleanController extends AbstractController
 {
+    public function __construct(private SluggerInterface $slugger, private CleanPhotoRepository $cleanPhotoRepository, private CleanHousekeeperRepository $cleanHousekeeperRepository, private CleanLinenRepository $cleanLinenRepository, private CleanSupplyRepository $cleanSupplyRepository) {}
+
     #[Route('/', name: 'app_clean_index', methods: ['GET'])]
-    public function index(CleanRepository $cleanRepository): Response
+    public function index(Request $request, CleanRepository $cleanRepository): Response
     {
+        $sortfield = ($request->query->has('sortfield')) ? $request->query->get('sortfield') : 'scheduled';
+        $sortdirection = ($request->query->has('sortdirection')) ? $request->query->get('sortdirection') : 'ASC';
+        $currentpage = ($request->query->has('currentpage')) ? (int) $request->query->get('currentpage') : 1;
+        $recordsperpage = ($request->query->has('recordsperpage')) ? (int) $request->query->get('recordsperpage') : 10;
+        $cleans = $cleanRepository->findBy([], [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $numberpages = (count($cleans) > 0) ? ceil(count($cleanRepository->findAll())/$recordsperpage) : 1;
         return $this->render('clean/index.html.twig', [
-            'cleans' => $cleanRepository->findAll(),
+            'cleans' => $cleans,
+            'numberpages' => $numberpages,
+            'currentpage' => $currentpage,
+            'total' => count($cleanRepository->findAll()),
+            'recordsperpage' => $recordsperpage,
+            'sortfield' => $sortfield,
+            'sortdirection' => $sortdirection,
         ]);
     }
 
@@ -30,6 +58,15 @@ class CleanController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $cleanRepository->save($clean, true);
+            $cleanhousekeepers = $form->get('housekeepers')->getData();
+            if ($cleanhousekeepers) {
+                foreach ($cleanhousekeepers as $housekeeper) {
+                    $cleanhousekeeper = new CleanHousekeeper();
+                    $cleanhousekeeper->setHousekeeper($housekeeper);
+                    $cleanhousekeeper->setClean($clean);
+                    $this->cleanHousekeeperRepository->save($cleanhousekeeper, true);
+                }
+            }
 
             return $this->redirectToRoute('app_clean_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -40,11 +77,50 @@ class CleanController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_clean_show', methods: ['GET'])]
-    public function show(Clean $clean): Response
+    #[Route('/{id}', name: 'app_clean_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, Clean $clean): Response
     {
+        $cleanPhoto = new CleanPhoto();
+        $cleanLinen = new CleanLinen();
+        $cleanSupply = new CleanSupply();
+        $form = $this->createForm(CleanPhotoType::class, $cleanPhoto);
+        $cleanlinenform = $this->createForm(CleanLinenType::class, $cleanLinen);
+        $cleansupplyform = $this->createForm(CleanSupplyType::class, $cleanSupply);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('file')->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            $cleanPhoto->setClean($clean);
+            $cleanPhoto->setUrl('/uploads/images/'.$newFilename);
+            $this->cleanPhotoRepository->save($cleanPhoto, true);
+        }
+        $cleanlinenform->handleRequest($request);
+        if ($cleanlinenform->isSubmitted() && $cleanlinenform->isValid()){
+            $cleanLinen->setClean($clean);
+            $this->cleanLinenRepository->save($cleanLinen, true);
+        }
+        $cleansupplyform->handleRequest($request);
+        if ($cleansupplyform->isSubmitted() && $cleansupplyform->isValid()) {
+            $cleanSupply->setClean($clean);
+            $this->cleanSupplyRepository->save($cleanSupply, true);
+        }
         return $this->render('clean/show.html.twig', [
             'clean' => $clean,
+            'form' => $form,
+            'cleanlinenform' => $cleanlinenform,
+            'cleansupplyform' => $cleansupplyform,
         ]);
     }
 

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CleanLinen{% endblock %}
+
+{% block body %}
+    <h1>Create new CleanLinen</h1>
+
+    {{ include('clean_linen/_form.html.twig') }}
+
+    <a href="{{ path('app_clean_linen_index') }}">back to list</a>
+{% endblock %}

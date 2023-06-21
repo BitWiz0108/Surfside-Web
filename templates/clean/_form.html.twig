@@ -1,4 +1,57 @@
 {{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="row my-2">
+            <div class="col-12">
+                <div class="text-danger">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-6">
+                {{ form_label(form.property) }}
+                {{ form_widget(form.property) }}
+                <small>{{ form_help(form.property) }}</small>
+            </div>
+            <div class="col-6">
+                {{ form_label(form.housekeepers) }}
+                {{ form_widget(form.housekeepers) }}
+                <small>{{ form_help(form.housekeepers) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-2">
+                {{ form_label(form.scheduled) }}
+                {{ form_widget(form.scheduled) }}
+                <small>{{ form_help(form.scheduled) }}</small>
+            </div>
+            <div class="col-10"></div>
+        </div>
+        <div class="row my-2 {% if button_label == 'Save' %}d-none{% endif %}">
+            <div class="col-2">
+                {{ form_label(form.start) }}
+                {{ form_widget(form.start) }}
+                <small>{{ form_help(form.start) }}</small>
+            </div>
+            <div class="col-2">
+                {{ form_label(form.end) }}
+                {{ form_widget(form.end) }}
+                <small>{{ form_help(form.end) }}</small>
+            </div>
+            <div class="col-8"></div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(form.notes) }}
+                {{ form_widget(form.notes) }}
+                <small>{{ form_help(form.notes) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 text-end">
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

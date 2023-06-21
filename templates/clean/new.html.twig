@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}New Clean{% endblock %}
-
+{% block title %}New Cleaning Appointment{% endblock %}
 {% block body %}
-    <h1>Create new Clean</h1>
-
-    {{ include('clean/_form.html.twig') }}
-
-    <a href="{{ path('app_clean_index') }}">back to list</a>
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+                <h4>New Cleaning Appointment</h4>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_clean_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                {{ include('clean/_form.html.twig', {'button_label': 'Save'}) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

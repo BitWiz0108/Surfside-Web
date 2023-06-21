@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CleanSupply{% endblock %}
+
+{% block body %}
+    <h1>Edit CleanSupply</h1>
+
+    {{ include('clean_supply/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_clean_supply_index') }}">back to list</a>
+
+    {{ include('clean_supply/_delete_form.html.twig') }}
+{% endblock %}

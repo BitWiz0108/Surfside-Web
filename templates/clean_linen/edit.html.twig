@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CleanLinen{% endblock %}
+
+{% block body %}
+    <h1>Edit CleanLinen</h1>
+
+    {{ include('clean_linen/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_clean_linen_index') }}">back to list</a>
+
+    {{ include('clean_linen/_delete_form.html.twig') }}
+{% endblock %}

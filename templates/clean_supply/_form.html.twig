@@ -1,0 +1,30 @@
+{{ form_start(cleansupplyform) }}
+    <div class="container-fluid">
+        <div class="row my-2">
+            <div class="col-12">
+                <span class="text-danger">
+                    {{ form_errors(cleansupplyform) }}
+                </span>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(cleansupplyform.supply) }}
+                {{ form_widget(cleansupplyform.supply) }}
+                <small>{{ form_help(cleansupplyform.supply) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_label(cleansupplyform.units) }}
+                {{ form_widget(cleansupplyform.units) }}
+                <small>{{ form_help(cleansupplyform.units) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 text-end">
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+{{ form_end(cleansupplyform) }}

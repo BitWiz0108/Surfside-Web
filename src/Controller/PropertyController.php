@@ -81,7 +81,6 @@ class PropertyController extends AbstractController
     #[Route('/{id}', name: 'app_property_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Property $property): Response
     {
-        // dd($request, $property);
         $propertyPhoto = new PropertyPhoto();
         $form = $this->createForm(PropertyPhotoType::class, $propertyPhoto);
         $form->handleRequest($request);

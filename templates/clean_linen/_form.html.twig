@@ -1,24 +1,24 @@
-{{ form_start(form) }}
+{{ form_start(cleanlinenform) }}
     <div class="container-fluid">
         <div class="row my-2">
             <div class="col-12">
-                <div class="text-danger">
-                    <small>{{ form_errors(form) }}</small>
-                </div>
+                <span class="text-danger">
+                    {{ form_errors(cleanlinenform) }}
+                </span>
             </div>
         </div>
         <div class="row my-2">
             <div class="col-12">
-                {{ form_label(form.file) }}
-                {{ form_widget(form.file) }}
-                <small>{{ form_help(form.file) }}</small>
+                {{ form_label(cleanlinenform.linen) }}
+                {{ form_widget(cleanlinenform.linen) }}
+                <small>{{ form_help(cleanlinenform.linen) }}</small>
             </div>
         </div>
         <div class="row my-2">
             <div class="col-12">
-                {{ form_label(form.title) }}
-                {{ form_widget(form.title) }}
-                <small>{{ form_help(form.title) }}</small>
+                {{ form_label(cleanlinenform.units) }}
+                {{ form_widget(cleanlinenform.units) }}
+                <small>{{ form_help(cleanlinenform.units) }}</small>
             </div>
         </div>
         <div class="row my-2">
@@ -27,4 +27,4 @@
             </div>
         </div>
     </div>
-{{ form_end(form) }}
+{{ form_end(cleanlinenform) }}

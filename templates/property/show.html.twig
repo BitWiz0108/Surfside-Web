@@ -60,7 +60,7 @@
                             {% if property.getPropertyPhotos()|length > 0 %}
                                 {% for photo in property.getPropertyPhotos() %}
                                     <div class="col text-center">
-                                        <img src="{{ asset(photo.url) }}" style="height:200px;" class="border border-"><br>
+                                        <img src="{{ asset(photo.url) }}" style="height:200px;" class="border border-1"><br>
                                         <span class="fst-italic">{{ photo.title }}</span>
                                     </div>
                                 {% endfor %}
@@ -75,6 +75,7 @@
             </div>
         </div>
     </div>
+    {{ include('property/_delete_form.html.twig') }}
     <div class="modal fade" id="newPropertyPhotoModal" tabindex="-1" aria-labelledby="newPropertyPhotoModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -88,5 +89,4 @@
         </div>
       </div>
     </div>    
-    {{ include('property/_delete_form.html.twig') }}
 {% endblock %}

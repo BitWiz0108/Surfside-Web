@@ -1,3 +1,13 @@
+<IfModule mod_rewrite.c>
+# RewriteEngine On
+# RewriteCond %{HTTP_HOST} ^concierge.mysticalgolf.com$ [OR]
+# RewriteRule (.*)$ https://concierge.magicalgolf.com/$1 [R=301,L]
+# 
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+# Header always set Content-Security-Policy "upgrade-insecure-requests;"
+</IfModule>
+
 # Use the front controller as index file. It serves as a fallback solution when
 # every other rewrite/redirect fails (e.g. in an aliased environment without
 # mod_rewrite). Additionally, this reduces the matching process for the
@@ -18,10 +28,6 @@ DirectoryIndex index.php
 </IfModule>
 
 <IfModule mod_rewrite.c>
-    # This Option needs to be enabled for RewriteRule, otherwise it will show an error like
-    # 'Options FollowSymLinks or SymLinksIfOwnerMatch is off which implies that RewriteRule directive is forbidden'
-    Options +FollowSymlinks
-
     RewriteEngine On
 
     # Determine the RewriteBase automatically and set it as environment variable.

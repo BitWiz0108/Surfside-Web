@@ -1,46 +1,193 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Clean{% endblock %}
-
 {% block body %}
-    <h1>Clean</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ clean.id }}</td>
-            </tr>
-            <tr>
-                <th>Scheduled</th>
-                <td>{{ clean.scheduled ? clean.scheduled|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Start</th>
-                <td>{{ clean.start ? clean.start|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>End</th>
-                <td>{{ clean.end ? clean.end|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Notes</th>
-                <td>{{ clean.notes }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Modified</th>
-                <td>{{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_clean_index') }}">back to list</a>
-
-    <a href="{{ path('app_clean_edit', {'id': clean.id}) }}">edit</a>
-
+    <div class="container-fluid">
+        <div class="row my-4">
+            <div class="col-6">
+                <h4>{{ clean.property.getTitle() }} on {{ clean.scheduled ? clean.scheduled|date('Y-m-d H:i') : '' }}</h4>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ path('app_clean_edit', {'id': clean.id}) }}" class="btn btn-primary btn-sm">Edit Details</a> <a href="{{ path('app_clean_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header text-start">
+                        Cleaning Appointment Details
+                    </div>
+                    <div class="card-body">
+                        <div class="row my-2">
+                            <div class="col-6">
+                                <span class="fw-bold">Housekeeper(s)</span>:<br>
+                                {% for cleanhousekeeper in clean.getCleanHousekeepers() %}
+                                    {{ cleanhousekeeper.getHousekeeper().getFirstName() }} {{ cleanhousekeeper.getHousekeeper().getLastName() }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}<br>
+                                <span class="fw-bold">Date/Time Started</span>: {{ clean.start ? clean.start|date('Y-m-d H:i') : '' }}<br>
+                                <span class="fw-bold">Date/Time Finished</span>: {{ clean.end ? clean.end|date('Y-m-d H:i') : '' }}
+                            </div>
+                            <div class="col-6">
+                                <span class="fw-bold">Created</span>: {{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}<br>
+                                <span class="fw-bold">Modified</span>: {{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}<br>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <span class="fw-bold">Notes:</span><br>
+                                {{ clean.notes }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header text-start">
+                        <div class="row">
+                            <div class="col-6">
+                                Linens Used
+                            </div>
+                            <div class="col-6 text-end">
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCleanLinenModal">Add Used Linen</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Linen</th>
+                                    <th>Units Used</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if clean.getCleanLinens()|length > 0 %}
+                                    {% for cleanlinen in clean.getCleanLinens() %}
+                                        <tr>
+                                            <td>{{ cleanlinen.getLinen().getName() }}</td>
+                                            <td>{{ cleanlinen.getUnits() }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2" class="text-danger fst-italic">No Linens Used</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header text-start">
+                        <div class="row">
+                            <div class="col-6">
+                                Supplies Used
+                            </div>
+                            <div class="col-6 text-end">
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCleanSupplyModal">Add Used Supply</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Supply</th>
+                                    <th>Units Used</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if clean.getCleanSupplies()|length > 0 %}
+                                    {% for cleansupply in clean.getCleanSupplies() %}
+                                        <tr>
+                                            <td>{{ cleansupply.getSupply().getName() }}</td>
+                                            <td>{{ cleansupply.getUnits() }}/{{ cleansupply.getSupply().getUnitsMeasurement() }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2" class="text-danger fst-italic">No Supplies Used</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header text-start">
+                        <div class="row">
+                            <div class="col-6">Cleaning Photos</div>
+                            <div class="col-6 text-end">
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCleanPhotoModal">New Photo</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row my-2">
+                            {% if clean.getCleanPhotos()|length > 0 %}
+                                {% for photo in clean.getCleanPhotos() %}
+                                    <div class="col text-center">
+                                        <img src="{{ asset(photo.url) }}" style="height:200px;" class="border border-1"><br>
+                                        <span class="fst-italic">{{ photo.title }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <span class="text-danger fst-italic">No photos found.</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {{ include('clean/_delete_form.html.twig') }}
+    <div class="modal fade" id="newCleanPhotoModal" tabindex="-1" aria-labelledby="newCleanPhotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCleanPhotoModalLabel">New Cleaning Appointment Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ include('clean_photo/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="modal fade" id="newCleanLinenModal" tabindex="-1" aria-labelledby="newCleanLinenModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCleanLinenModalLabel">Add Used Linens</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ include('clean_linen/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="newCleanSupplyModal" tabindex="-1" aria-labelledby="newCleanSupplyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCleanSupplyModalLabel">Add Used Supplies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    <div class="modal-body">
+                    {{ include('clean_supply/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
