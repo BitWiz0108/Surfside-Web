@@ -85,6 +85,9 @@ class Property
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $modified = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $cost = null;
+
     public function __construct()
     {
         $this->propertyPhotos = new ArrayCollection();
@@ -409,6 +412,18 @@ class Property
     public function setModified(?\DateTimeInterface $modified): static
     {
         $this->modified = $modified;
+
+        return $this;
+    }
+
+    public function getCost(): ?float
+    {
+        return $this->cost;
+    }
+
+    public function setCost(?float $cost): static
+    {
+        $this->cost = $cost;
 
         return $this;
     }

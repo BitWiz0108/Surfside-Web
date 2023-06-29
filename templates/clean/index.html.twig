@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
-{% block title %}Cleaning Schedule{% endblock %}
+{% block title %}Cleaning Appointments{% endblock %}
 {% block body %}
     <div class="container-fluid">
         <div class="row my-4">
             <div class="col-6">
-                <h4>Cleaning Schedule</h4>
+                <h4>Cleaning Appointments</h4>
             </div>
             <div class="col-6 text-end">
                 <a href="{{ path('app_clean_new') }}" class="btn btn-primary btn-sm">Create New</a>
@@ -18,96 +18,96 @@
                             <th>Id <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'id' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Property <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'property' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=property&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=property&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Scheduled <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'scheduled' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=scheduled&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=scheduled&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Start <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'start' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=start&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=start&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>End <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'end' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=end&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=end&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Notes <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'notes' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=notes&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=notes&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Created <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'created' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Modified <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'modified' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
@@ -119,15 +119,14 @@
                         <tr>
                             <td>{{ clean.id }}</td>
                             <td>{{ clean.property }}</td>
-                            <td>{{ clean.scheduled ? clean.scheduled|date('Y-m-d H:i') : '' }}</td>
-                            <td>{{ clean.start ? clean.start|date('Y-m-d H:i') : '' }}</td>
-                            <td>{{ clean.end ? clean.end|date('Y-m-d H:i') : '' }}</td>
+                            <td>{{ clean.scheduled ? clean.scheduled|date('Y-m-d h:i a') : '' }}</td>
+                            <td>{{ clean.start ? clean.start|date('Y-m-d h:i a') : '' }}</td>
+                            <td>{{ clean.end ? clean.end|date('Y-m-d h:i a') : '' }}</td>
                             <td>{{ clean.notes }}</td>
                             <td>{{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}</td>
                             <td>{{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</td>
                             <td class="text-end">
-                                <a href="{{ path('app_clean_show', {'id': clean.id}) }}">show</a> | 
-                                <a href="{{ path('app_clean_edit', {'id': clean.id}) }}">edit</a>
+                                <a href="{{ path('app_clean_show', {'id': clean.id}) }}">show</a>
                             </td>
                         </tr>
                     {% else %}
@@ -138,7 +137,21 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="9">
+                            <td colspan="4">
+                                Records 
+                                {% if numberpages <= 1 %}
+                                    1 - {{ total }}
+                                {% else %}
+                                    {{ ((currentpage-1) * recordsperpage) + 1 }} - 
+                                    {% if total > (currentpage * recordsperpage) %}
+                                        {{ currentpage * recordsperpage }}
+                                    {% else %}
+                                        {{ total }}
+                                    {% endif %}
+                                {% endif %}
+                                 of {{ total }}
+                            </td>
+                            <td colspan="5">
                                 <nav aria-label="..." class="float-end">
                                     <ul class="pagination">
                                         <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">

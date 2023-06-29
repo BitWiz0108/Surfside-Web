@@ -57,13 +57,68 @@ class HousekeeperController extends AbstractController
             ])
         ;
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $i9front = $form->get('i9front')->getData();
+            $i9back = $form->get('i9back')->getData();
+            if ($i9front) {
+                $originalFilename = pathinfo($i9front->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$i9front->guessExtension();
+                try {
+                    $i9front->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            if ($i9back) {
+                $originalFilename = pathinfo($i9back->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$i9back->guessExtension();
+                try {
+                    $i9back->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            if ($idfront) {
+                $frontidoriginalFilename = pathinfo($idfront->getClientOriginalName(), PATHINFO_FILENAME);
+                $frontidsafeFilename = $this->slugger->slug($frontidoriginalFilename);
+                $frontidnewFilename = $frontidsafeFilename.'-'.uniqid().'.'.$idfront->guessExtension();
+                try {
+                    $idfront->move(
+                        $this->getParameter('images_directory'),
+                        $frontidnewFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            if ($idback) {
+                $backidoriginalFilename = pathinfo($idback->getClientOriginalName(), PATHINFO_FILENAME);
+                $backidsafeFilename = $this->slugger->slug($backidoriginalFilename);
+                $backidnewFilename = $backidsafeFilename.'-'.uniqid().'.'.$idback->guessExtension();
+                try {
+                    $idback->move(
+                        $this->getParameter('images_directory'),
+                        $backidnewFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            $housekeeper->setINineFront('/uploads/images/'.$frontnewFilename);
+            $housekeeper->setINineBack('/uploads/images/'.$backnewFilename);
+            $housekeeper->setIdFront('/uploads/images/'.$frontidnewFilename);
+            $housekeeper->setIdBack('/uploads/images/'.$backidnewFilename);
             $housekeeperRepository->save($housekeeper, true);
-
             return $this->redirectToRoute('app_housekeeper_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('housekeeper/new.html.twig', [
             'housekeeper' => $housekeeper,
             'form' => $form,
@@ -84,13 +139,70 @@ class HousekeeperController extends AbstractController
         $form = $this->createForm(HousekeeperType::class, $housekeeper);
         $form->remove('user');
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $i9front = $form->get('i9front')->getData();
+            $i9back = $form->get('i9back')->getData();
+            $idfront = $form->get('idfront')->getData();
+            $idback = $form->get('idback')->getData();
+            if ($i9front) {
+                $frontoriginalFilename = pathinfo($i9front->getClientOriginalName(), PATHINFO_FILENAME);
+                $frontsafeFilename = $this->slugger->slug($frontoriginalFilename);
+                $frontnewFilename = $frontsafeFilename.'-'.uniqid().'.'.$i9front->guessExtension();
+                try {
+                    $i9front->move(
+                        $this->getParameter('images_directory'),
+                        $frontnewFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            if ($i9back) {
+                $backoriginalFilename = pathinfo($i9back->getClientOriginalName(), PATHINFO_FILENAME);
+                $backsafeFilename = $this->slugger->slug($backoriginalFilename);
+                $backnewFilename = $backsafeFilename.'-'.uniqid().'.'.$i9back->guessExtension();
+                try {
+                    $i9back->move(
+                        $this->getParameter('images_directory'),
+                        $backnewFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            if ($idfront) {
+                $frontidoriginalFilename = pathinfo($idfront->getClientOriginalName(), PATHINFO_FILENAME);
+                $frontidsafeFilename = $this->slugger->slug($frontidoriginalFilename);
+                $frontidnewFilename = $frontidsafeFilename.'-'.uniqid().'.'.$idfront->guessExtension();
+                try {
+                    $idfront->move(
+                        $this->getParameter('images_directory'),
+                        $frontidnewFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            if ($idback) {
+                $backidoriginalFilename = pathinfo($idback->getClientOriginalName(), PATHINFO_FILENAME);
+                $backidsafeFilename = $this->slugger->slug($backidoriginalFilename);
+                $backidnewFilename = $backidsafeFilename.'-'.uniqid().'.'.$idback->guessExtension();
+                try {
+                    $idback->move(
+                        $this->getParameter('images_directory'),
+                        $backidnewFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            $housekeeper->setINineFront('/uploads/images/'.$frontnewFilename);
+            $housekeeper->setINineBack('/uploads/images/'.$backnewFilename);
+            $housekeeper->setIdFront('/uploads/images/'.$frontidnewFilename);
+            $housekeeper->setIdBack('/uploads/images/'.$backidnewFilename);
             $housekeeperRepository->save($housekeeper, true);
-
             return $this->redirectToRoute('app_housekeeper_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('housekeeper/edit.html.twig', [
             'housekeeper' => $housekeeper,
             'form' => $form,

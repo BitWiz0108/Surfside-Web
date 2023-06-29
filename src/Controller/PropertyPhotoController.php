@@ -69,10 +69,11 @@ class PropertyPhotoController extends AbstractController
     #[Route('/{id}', name: 'app_property_photo_delete', methods: ['POST'])]
     public function delete(Request $request, PropertyPhoto $propertyPhoto, PropertyPhotoRepository $propertyPhotoRepository): Response
     {
+        $property = $propertyPhoto->getProperty();
         if ($this->isCsrfTokenValid('delete'.$propertyPhoto->getId(), $request->request->get('_token'))) {
             $propertyPhotoRepository->remove($propertyPhoto, true);
         }
 
-        return $this->redirectToRoute('app_property_photo_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_property_show', ['id' => $property->getId()], Response::HTTP_SEE_OTHER);
     }
 }

@@ -51,6 +51,7 @@ class CalendarSubscriber implements EventSubscriberInterface
             $scheduledEvent->setOptions([
                 'backgroundColor' => 'blue',
                 'borderColor' => 'blue',
+                'url' => '/clean/'.$clean->getId(),
             ]);
             // finally, add the event to the CalendarEvent to fill the calendar
             $calendar->addEvent($scheduledEvent);

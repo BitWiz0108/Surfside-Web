@@ -18,60 +18,60 @@
                             <th>Id <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'id' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Name <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'name' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=name&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=name&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Units <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'units' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=units&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=units&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Created <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'created' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Modified <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'modified' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down-a-z"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+                                        <a href="/linen/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/linen/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
@@ -99,7 +99,21 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="7">
+                            <td colspan="3">
+                                Records 
+                                {% if numberpages <= 1 %}
+                                    1 - {{ total }}
+                                {% else %}
+                                    {{ ((currentpage-1) * recordsperpage) + 1 }} - 
+                                    {% if total > (currentpage * recordsperpage) %}
+                                        {{ currentpage * recordsperpage }}
+                                    {% else %}
+                                        {{ total }}
+                                    {% endif %}
+                                {% endif %}
+                                 of {{ total }}
+                            </td>
+                            <td colspan="3">
                                 <nav aria-label="..." class="float-end">
                                     <ul class="pagination">
                                         <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">

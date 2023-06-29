@@ -4,38 +4,34 @@
     <div class="container-fluid">
         <div class="row my-4">
             <div class="col-6">
-                <h4>Linen</h4>
+                <h4>{{ linen.name }}</h4>
             </div>
             <div class="col-6 text-end">
-                <a href="{{ path('app_linen_edit', {'id': linen.id}) }}" class="btn btn-primary btn-sm">Edit</a> <a href="{{ path('app_linen_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+                 <a href="{{ path('app_linen_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-12">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td>{{ linen.id }}</td>
-                        </tr>
-                        <tr>
-                            <th>Name</th>
-                            <td>{{ linen.name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Units</th>
-                            <td>{{ linen.units }}</td>
-                        </tr>
-                        <tr>
-                            <th>Created</th>
-                            <td>{{ linen.created ? linen.created|date('Y-m-d H:i:s') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Modified</th>
-                            <td>{{ linen.modified ? linen.modified|date('Y-m-d H:i:s') : '' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6 text-start">Details</div>
+                            <div class="col-6 text-end"><a href="{{ path('app_linen_edit', {'id': linen.id}) }}" class="btn btn-primary btn-sm">Edit</a></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                Units On Hand: {{ linen.units }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12 text-end">
+                <small><strong>Created</strong>: {{ linen.created ? linen.created|date('Y-m-d H:i:s') : '' }} <strong>Modified</strong>: {{ linen.modified ? linen.modified|date('Y-m-d H:i:s') : '' }}</small>
             </div>
         </div>
     </div>

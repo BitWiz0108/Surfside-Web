@@ -69,6 +69,13 @@ class CleanType extends AbstractType
                 ],
             ])
             ->add('notes', TextareaType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('inspectionNotes', TextareaType::class, [
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                 ],

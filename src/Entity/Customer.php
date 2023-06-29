@@ -49,6 +49,9 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Property::class)]
     private Collection $properties;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $calendarUrl = null;
+
     public function __construct()
     {
         $this->properties = new ArrayCollection();
@@ -205,6 +208,18 @@ class Customer
                 $property->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCalendarUrl(): ?string
+    {
+        return $this->calendarUrl;
+    }
+
+    public function setCalendarUrl(?string $calendarUrl): static
+    {
+        $this->calendarUrl = $calendarUrl;
 
         return $this;
     }

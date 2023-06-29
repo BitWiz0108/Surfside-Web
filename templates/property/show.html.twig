@@ -6,23 +6,32 @@
             <div class="col-6">
             </div>
             <div class="col-6 text-end">
-                <a href="{{ path('app_property_edit', {'id': property.id}) }}" class="btn btn-primary btn-sm">Edit</a> <a href="{{ path('app_property_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+                <a href="{{ path('app_property_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-12">
                 <div class="card my-4">
-                    <div class="card-header text-start">Details ({{ property.id }})</div>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6 text-start">Property Details ({{ property.id }})</div>
+                            <div class="col-6 text-end">
+                                <a href="{{ path('app_property_edit', {'id': property.id}) }}" class="btn btn-primary btn-sm">Edit Details</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-3">
+                                <strong><a href="/customer/{{ property.getCustomer().getId() }}">{{ property.getCustomer().getCompany() }}</a></strong><br>
                                 {{ property.title }}<br>
                                 {{ property.address }}<br>
                                 {{ property.city }}, {{ property.state }} {{ property.postalcode }}<br>
                                 {{ property.latitude }} : {{ property.longitude }}<br>
-                                <strong>Sq. Ft.</strong> {{ property.squareFeet }}
+                                <strong>Sq. Ft.</strong> {{ property.squareFeet }}<br>
+                                <strong>Cost/Appointment</strong> {% if property.cost %} ${{ property.cost }} {% else %}<span class="text-danger fst-italic">No Price Set</span>{% endif %}
                             </div>
-                            <div class="col-6">
+                            <div class="col-3">
                                 <strong>Bedrooms</strong> {{ property.bedrooms }}<br>
                                 <strong>Bathrooms</strong> {{ property.bathrooms }}<br>
                                 <strong>Kings</strong> {{ property.kings }}<br>
@@ -31,6 +40,14 @@
                                 <strong>Towls</strong> {{ property.towels }}<br>
                                 <strong>Hand Towels</strong> {{ property.handTowels }}<br>
                                 <strong>Wash Cloths</strong> {{ property.washCloths }}<br>
+                            </div>
+                            <div class="col-6 text-center">
+                                {% if property.getLatitude() and property.getLongitude() %}
+                                    <img width="400" height="350" class="border border-dark" src="https://maps.googleapis.com/maps/api/staticmap?center={{ property.getLatitude() }},{{ property.getLongitude() }}&zoom=15&size=400x350&markers=|{{ property.getLatitude() }},{{ property.getLongitude() }}&key=AIzaSyDsSbBwA4vadQpxHcbhtHWxdDdXiel3d5A"><br>
+                                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ property.getLatitude() }},{{ property.getLongitude() }}" target="_blank"><i class="fas fa-car"></i> Directions</a><br>
+                                {% else %}
+                                    <span class="fst-italic text-danger">Directions not available.</span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row">
@@ -58,10 +75,13 @@
                     <div class="card-body">
                         <div class="row">
                             {% if property.getPropertyPhotos()|length > 0 %}
-                                {% for photo in property.getPropertyPhotos() %}
+                                {% for property_photo in property.getPropertyPhotos() %}
                                     <div class="col text-center">
-                                        <img src="{{ asset(photo.url) }}" style="height:200px;" class="border border-1"><br>
-                                        <span class="fst-italic">{{ photo.title }}</span>
+                                        <div style="position:relative;display:inline-block;">
+                                            <img src="{{ asset(property_photo.url) }}" style="height:200px;" class="border border-1"><br>
+                                            <span class="fst-italic fw-bold">{{ property_photo.title }}</span>
+                                            {{ include('property_photo/_delete_form.html.twig') }}
+                                        </div>
                                     </div>
                                 {% endfor %}
                             {% else %}
@@ -74,19 +94,47 @@
                 </div>
             </div>
         </div>
-    </div>
-    {{ include('property/_delete_form.html.twig') }}
-    <div class="modal fade" id="newPropertyPhotoModal" tabindex="-1" aria-labelledby="newPropertyPhotoModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="newPropertyPhotoModalLabel">New Property Photo</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            {{ include('property_photo/_form.html.twig') }}
-          </div>
+        <div class="row my-4">
+            <div class="col-12">
+                
+            </div>
         </div>
-      </div>
+        <div class="row my-4">
+            <div class="col-4 text-center align-middle">
+                <div class="card rounded" style="width:150px">
+                    <div class="card-header text-center align-middle bg-secondary text-white">
+                        Times Cleaned
+                    </div>
+                    <div class="card-body text-center align-middle">
+                        <span class="fs-3">{{ totalcleans }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 text-center">
+                <div style="width:350px">
+                    <small class="fw-bold">Housekeepers that have cleaned this property</small>
+                    {{ render_chart(chart) }}
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                {{ include('property/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="newPropertyPhotoModal" tabindex="-1" aria-labelledby="newPropertyPhotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newPropertyPhotoModalLabel">New Property Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ include('property_photo/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
     </div>    
 {% endblock %}

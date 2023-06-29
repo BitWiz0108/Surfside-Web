@@ -49,6 +49,9 @@ class Clean
     #[ORM\OneToMany(mappedBy: 'clean', targetEntity: CleanHousekeeper::class)]
     private Collection $cleanHousekeepers;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $inspectionNotes = null;
+
     public function __construct()
     {
         $this->cleanPhotos = new ArrayCollection();
@@ -262,6 +265,18 @@ class Clean
                 $cleanHousekeeper->setClean(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInspectionNotes(): ?string
+    {
+        return $this->inspectionNotes;
+    }
+
+    public function setInspectionNotes(?string $inspectionNotes): static
+    {
+        $this->inspectionNotes = $inspectionNotes;
 
         return $this;
     }

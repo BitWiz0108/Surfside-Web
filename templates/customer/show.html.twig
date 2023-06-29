@@ -7,55 +7,54 @@
                 <h4>Customer</h4>
             </div>
             <div class="col-6 text-end">
-                <a href="{{ path('app_customer_edit', {'id': customer.id}) }}" class="btn btn-primary btn-sm">Edit</a> <a href="{{ path('app_customer_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+                <a href="{{ path('app_customer_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-12">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td>{{ customer.id }}</td>
-                        </tr>
-                        <tr>
-                            <th>First_name</th>
-                            <td>{{ customer.firstName }}</td>
-                        </tr>
-                        <tr>
-                            <th>Last_name</th>
-                            <td>{{ customer.lastName }}</td>
-                        </tr>
-                        <tr>
-                            <th>Company</th>
-                            <td>{{ customer.company }}</td>
-                        </tr>
-                        <tr>
-                            <th>Address</th>
-                            <td>{{ customer.address }}</td>
-                        </tr>
-                        <tr>
-                            <th>City</th>
-                            <td>{{ customer.city }}</td>
-                        </tr>
-                        <tr>
-                            <th>State</th>
-                            <td>{{ customer.state }}</td>
-                        </tr>
-                        <tr>
-                            <th>Postalcode</th>
-                            <td>{{ customer.postalcode }}</td>
-                        </tr>
-                        <tr>
-                            <th>Created</th>
-                            <td>{{ customer.created ? customer.created|date('Y-m-d H:i:s') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Modified</th>
-                            <td>{{ customer.modified ? customer.modified|date('Y-m-d H:i:s') : '' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card my-4">
+                    <div class="card-header text-start">
+                        <div class="row">
+                            <div class="col-6">{{ customer.company }} Details</div>
+                            <div class="col-6 text-end"><a href="{{ path('app_customer_edit', {'id': customer.id}) }}" class="btn btn-primary btn-sm">Edit</a></div>
+                        </div>
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                {{ customer.lastName }}, {{ customer.firstName }}<br>
+                                {{ customer.address }}<br>
+                                {{ customer.city }}, {{ customer.state }} {{ customer.postalcode }}
+                                <br><br>
+                                <strong>Calendar Url</strong>: {{ customer.calendarUrl }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header text-start">
+                        Properties
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                {% if customer.getProperties()|length > 0 %}
+                                    {% for property in customer.getProperties() %}
+                                        <a href="/property/{{ property.getId() }}">{{ property.getTitle() }} - {{ property.getAddress() }}, {{ property.getCity() }}, {{ property.getState() }} {{ property.getPostalcode() }}</a><br>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-danger fst-italic">No Properties</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12 text-end">
+                <small><span class="fw-bold">Created</span>: {{ customer.created ? customer.created|date('Y-m-d H:i:s') : '' }} <span class="fw-bold">Modified</span>: {{ customer.modified ? customer.modified|date('Y-m-d H:i:s') : '' }}</small>
             </div>
         </div>
     </div>

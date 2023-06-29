@@ -49,6 +49,18 @@ class Housekeeper
     #[ORM\OneToMany(mappedBy: 'housekeeper', targetEntity: CleanHousekeeper::class)]
     private Collection $cleanHousekeepers;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $iNineFront = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $iNineBack = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $idFront = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $idBack = null;
+
     public function __construct()
     {
         $this->cleanHousekeepers = new ArrayCollection();
@@ -210,6 +222,54 @@ class Housekeeper
                 $cleanHousekeeper->setHousekeeper(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getINineFront(): ?string
+    {
+        return $this->iNineFront;
+    }
+
+    public function setINineFront(?string $iNineFront): static
+    {
+        $this->iNineFront = $iNineFront;
+
+        return $this;
+    }
+
+    public function getINineBack(): ?string
+    {
+        return $this->iNineBack;
+    }
+
+    public function setINineBack(?string $iNineBack): static
+    {
+        $this->iNineBack = $iNineBack;
+
+        return $this;
+    }
+
+    public function getIdFront(): ?string
+    {
+        return $this->idFront;
+    }
+
+    public function setIdFront(?string $idFront): static
+    {
+        $this->idFront = $idFront;
+
+        return $this;
+    }
+
+    public function getIdBack(): ?string
+    {
+        return $this->idBack;
+    }
+
+    public function setIdBack(?string $idBack): static
+    {
+        $this->idBack = $idBack;
 
         return $this;
     }

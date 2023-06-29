@@ -20,9 +20,9 @@ class CleanSupplyType extends AbstractType
                 'class' => Supply::class,
                 'query_builder' => function (SupplyRepository $sr) {
                     return $sr->createQueryBuilder('s')
+                        ->andWhere('s.units > 0')
                         ->orderBy('s.name', 'ASC');
                 },
-                'choice_label' => 'name',
                 'attr' => [
                     'class' => 'form-control',
                 ],

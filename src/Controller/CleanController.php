@@ -7,6 +7,8 @@ use App\Entity\CleanHousekeeper;
 use App\Entity\CleanLinen;
 use App\Entity\CleanPhoto;
 use App\Entity\CleanSupply;
+use App\Entity\Linen;
+use App\Entity\Supply;
 use App\Form\CleanType;
 use App\Form\CleanLinenType;
 use App\Form\CleanPhotoType;
@@ -16,6 +18,8 @@ use App\Repository\CleanHousekeeperRepository;
 use App\Repository\CleanLinenRepository;
 use App\Repository\CleanPhotoRepository;
 use App\Repository\CleanSupplyRepository;
+use App\Repository\LinenRepository;
+use App\Repository\SupplyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,7 +82,7 @@ class CleanController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_clean_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, Clean $clean): Response
+    public function show(Request $request, Clean $clean, LinenRepository $linenRepository, SupplyRepository $supplyRepository): Response
     {
         $cleanPhoto = new CleanPhoto();
         $cleanLinen = new CleanLinen();
@@ -109,12 +113,18 @@ class CleanController extends AbstractController
         $cleanlinenform->handleRequest($request);
         if ($cleanlinenform->isSubmitted() && $cleanlinenform->isValid()){
             $cleanLinen->setClean($clean);
+            $linen = $cleanLinen->getLinen();
+            $linen->setUnits($linen->getUnits()-$cleanLinen->getUnits());
             $this->cleanLinenRepository->save($cleanLinen, true);
+            $linenRepository->save($linen, true);
         }
         $cleansupplyform->handleRequest($request);
         if ($cleansupplyform->isSubmitted() && $cleansupplyform->isValid()) {
             $cleanSupply->setClean($clean);
+            $supply = $cleanSupply->getSupply();
+            $supply->setUnits($supply->getUnits()-$cleanSupply->getUnits());
             $this->cleanSupplyRepository->save($cleanSupply, true);
+            $supplyRepository->save($supply, true);
         }
         return $this->render('clean/show.html.twig', [
             'clean' => $clean,
@@ -129,13 +139,10 @@ class CleanController extends AbstractController
     {
         $form = $this->createForm(CleanType::class, $clean);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $cleanRepository->save($clean, true);
-
-            return $this->redirectToRoute('app_clean_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_clean_show', ['id' => $clean->getId()], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('clean/edit.html.twig', [
             'clean' => $clean,
             'form' => $form,

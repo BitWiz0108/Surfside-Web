@@ -7,6 +7,7 @@ use App\Entity\Property;
 use App\Entity\PropertyPhoto;
 use App\Form\PropertyType;
 use App\Form\PropertyPhotoType;
+use App\Repository\CleanHousekeeperRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\PropertyRepository;
 use App\Repository\PropertyPhotoRepository;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 #[Route('/property')]
 class PropertyController extends AbstractController
@@ -79,7 +82,7 @@ class PropertyController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_property_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, Property $property): Response
+    public function show(Request $request, Property $property, ChartBuilderInterface $chartBuilder, CleanHousekeeperRepository $cleanHousekeeperRepository): Response
     {
         $propertyPhoto = new PropertyPhoto();
         $form = $this->createForm(PropertyPhotoType::class, $propertyPhoto);
@@ -103,10 +106,41 @@ class PropertyController extends AbstractController
             $propertyPhoto->setUrl('/uploads/images/'.$newFilename);
             $this->propertyPhotoRepository->save($propertyPhoto, true);
         }
-
+        $chartData = $cleanHousekeeperRepository->createQueryBuilder('chr')
+            ->select('h.first_name, h.last_name, COUNT(chr.housekeeper) as cleans_count')
+            ->leftJoin('chr.clean', 'c')
+            ->leftJoin('chr.housekeeper', 'h')
+            ->andWhere('c.property = :property')
+            ->groupBy('chr.housekeeper')
+            ->setParameter('property', $property)
+            ->getQuery()
+            ->getResult()
+        ;
+        $labels = [];
+        $data = [];
+        $totalcleans = 0;
+        foreach($chartData as $rec) {
+            $labels[] = $rec['first_name'].' '.$rec['last_name'];
+            $data[] = $rec['cleans_count'];
+            $totalcleans += $rec['cleans_count'];
+        }
+        $chart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+        $chart->setData([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Housekeeper/Property Experience',
+                    'backgroundColor' => ['blueviolet', 'aliceblue', 'cornflowerblue', 'blancedalmond', 'darkmagenta', 'darkolivegreen', 'cornsilk', 'gold', 'ghostwhite', 'indianred', 'honeydew', 'lavender', 'lemonchiffon', 'lavenderblush', 'ivory', 'khaki', 'mediumpurple', 'mintcream', 'mavajowhite', 'olive', 'oldlace', 'orchid', 'plum', 'silver', 'rosybrown'],
+                    'borderColor' => ['blueviolet', 'aliceblue', 'cornflowerblue', 'blancedalmond', 'darkmagenta', 'darkolivegreen', 'cornsilk', 'gold', 'ghostwhite', 'indianred', 'honeydew', 'lavender', 'lemonchiffon', 'lavenderblush', 'ivory', 'khaki', 'mediumpurple', 'mintcream', 'mavajowhite', 'olive', 'oldlace', 'orchid', 'plum', 'silver', 'rosybrown'],
+                    'data' => $data,
+                ],
+            ],
+        ]);  
         return $this->render('property/show.html.twig', [
             'property' => $property,
-            'form' => $form,            
+            'form' => $form,    
+            'chart' => $chart, 
+            'totalcleans' => $totalcleans,       
         ]);
     }
 

@@ -4,37 +4,47 @@
     <div class="container-fluid">
         <div class="row my-4">
             <div class="col-6">
-                <h4>{{ clean.property.getTitle() }} on {{ clean.scheduled ? clean.scheduled|date('Y-m-d H:i') : '' }}</h4>
+                <h4>{{ clean.property.getTitle() }} on {{ clean.scheduled ? clean.scheduled|date('Y-m-d h:i a') : '' }} ({{ clean.getProperty().getCustomer().getCompany() }})</h4>
             </div>
             <div class="col-6 text-end">
-                <a href="{{ path('app_clean_edit', {'id': clean.id}) }}" class="btn btn-primary btn-sm">Edit Details</a> <a href="{{ path('app_clean_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
+                 <a href="{{ path('app_clean_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-12">
                 <div class="card my-4">
-                    <div class="card-header text-start">
-                        Cleaning Appointment Details
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6 text-start">Cleaning Appointment Details</div>
+                            <div class="col-6 text-end">
+                                <a href="{{ path('app_clean_edit', {'id': clean.id}) }}" class="btn btn-primary btn-sm">Edit Details</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row my-2">
                             <div class="col-6">
+                                {{ clean.property.getAddress() }}<br>
+                                {{ clean.property.getCity() }}, {{ clean.property.getState() }}  {{ clean.property.getPostalCode() }}
+                                <br><br>
                                 <span class="fw-bold">Housekeeper(s)</span>:<br>
                                 {% for cleanhousekeeper in clean.getCleanHousekeepers() %}
                                     {{ cleanhousekeeper.getHousekeeper().getFirstName() }} {{ cleanhousekeeper.getHousekeeper().getLastName() }}{% if not loop.last %}, {% endif %}
-                                {% endfor %}<br>
-                                <span class="fw-bold">Date/Time Started</span>: {{ clean.start ? clean.start|date('Y-m-d H:i') : '' }}<br>
-                                <span class="fw-bold">Date/Time Finished</span>: {{ clean.end ? clean.end|date('Y-m-d H:i') : '' }}
-                            </div>
-                            <div class="col-6">
-                                <span class="fw-bold">Created</span>: {{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}<br>
-                                <span class="fw-bold">Modified</span>: {{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}<br>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-12">
+                                {% endfor %}
+                                <br><br>
+                                <span class="fw-bold">Date/Time Started</span>: {{ clean.start ? clean.start|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Not started</span>' }}<br>
+                                <span class="fw-bold">Date/Time Finished</span>: {{ clean.end ? clean.end|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Not finished</span>' }}
+                                <br><br>
                                 <span class="fw-bold">Notes:</span><br>
                                 {{ clean.notes }}
+                            </div>
+                            <div class="col-6 text-center">
+                                {% if clean.property.getLatitude() and clean.property.getLongitude() %}
+                                    <img width="400" height="350" class="border border-dark" src="https://maps.googleapis.com/maps/api/staticmap?center={{ clean.property.getLatitude() }},{{ clean.property.getLongitude() }}&zoom=15&size=400x350&markers=|{{ clean.property.getLatitude() }},{{ clean.property.getLongitude() }}&key=AIzaSyDsSbBwA4vadQpxHcbhtHWxdDdXiel3d5A"><br>
+                                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ clean.property.getLatitude() }},{{ clean.property.getLongitude() }}" target="_blank"><i class="fas fa-car"></i> Directions</a><br>
+                                {% else %}
+                                    <span class="fst-italic text-danger">Directions not available.</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -121,7 +131,23 @@
         </div>
         <div class="row my-4">
             <div class="col-12">
-                <div class="card my-4">
+                <div class="card my-2">
+                    <div class="card-header text-start">
+                        Inspection Notes
+                    </div>
+                    <div class="card-body">
+                        {% if clean.inspectionNotes %}
+                            {{ clean.inspectionNotes }}
+                        {% else %}
+                            <span class="text-danger fst-italic">No Inspection Notes</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <div class="card my-2">
                     <div class="card-header text-start">
                         <div class="row">
                             <div class="col-6">Cleaning Photos</div>
@@ -133,10 +159,13 @@
                     <div class="card-body">
                         <div class="row my-2">
                             {% if clean.getCleanPhotos()|length > 0 %}
-                                {% for photo in clean.getCleanPhotos() %}
+                                {% for clean_photo in clean.getCleanPhotos() %}
                                     <div class="col text-center">
-                                        <img src="{{ asset(photo.url) }}" style="height:200px;" class="border border-1"><br>
-                                        <span class="fst-italic">{{ photo.title }}</span>
+                                        <div style="position:relative;display:inline-block;">
+                                            <img src="{{ asset(clean_photo.url) }}" style="height:200px;" class="border border-1"><br>
+                                            <span class="fst-italic fw-bold">{{ clean_photo.title }}</span>
+                                            {{ include('clean_photo/_delete_form.html.twig') }}
+                                        </div>
                                     </div>
                                 {% endfor %}
                             {% else %}
@@ -149,8 +178,15 @@
                 </div>
             </div>
         </div>
+        <div class="row my-4">
+            <div class="col-12">{{ include('clean/_delete_form.html.twig') }}</div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12 text-end">
+                <small><span class="fw-bold">Created</span>: {{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }} <span class="fw-bold">Modified</span>: {{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</small>
+            </div>
+        </div>
     </div>
-    {{ include('clean/_delete_form.html.twig') }}
     <div class="modal fade" id="newCleanPhotoModal" tabindex="-1" aria-labelledby="newCleanPhotoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

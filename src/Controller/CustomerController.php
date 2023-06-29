@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
+use App\Entity\Property;
 use App\Entity\User;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
+use App\Repository\PropertyRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,7 +39,7 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/new', name: 'app_customer_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, CustomerRepository $customerRepository): Response
+    public function new(Request $request, CustomerRepository $customerRepository, PropertyRepository $propertyRepository): Response
     {
         $customer = new Customer();
         $form = $this->createForm(CustomerType::class, $customer)
@@ -54,15 +56,36 @@ class CustomerController extends AbstractController
                 'attr' => [
                     'class' => 'form-select',
                 ],
-            ]);
+            ])
+            ->add('properties', EntityType::class, [
+                'class' => Property::class,
+                'query_builder' => function (PropertyRepository $pr) {
+                    return $pr->createQueryBuilder('p')
+                        ->andWhere('p.customer IS NULL')
+                        ->orderBy('p.title', 'ASC');
+                },
+                'required' => false,
+                'multiple' => true,
+                'expanded' => false,
+                'choice_label' => 'title',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'help' => 'Hold ctrl and click to select multiple properties.'
+            ])
+        ;
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $customerproperties = $form->get('properties')->getData();
             $customerRepository->save($customer, true);
-
+            if ($customerproperties) {
+                foreach ($customerproperties as $property) {
+                    $property->setCustomer($customer);
+                    $propertyRepository->save($customer, true);
+                }
+            }
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('customer/new.html.twig', [
             'customer' => $customer,
             'form' => $form,
@@ -78,17 +101,40 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_customer_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Customer $customer, CustomerRepository $customerRepository): Response
+    public function edit(Request $request, Customer $customer, CustomerRepository $customerRepository, PropertyRepository $propertyRepository): Response
     {
-        $form = $this->createForm(CustomerType::class, $customer);
+        $form = $this->createForm(CustomerType::class, $customer)
+            ->add('properties', EntityType::class, [
+                'class' => Property::class,
+                'query_builder' => function (PropertyRepository $pr) {
+                    return $pr->createQueryBuilder('p')
+                        ->orderBy('p.title', 'ASC');
+                },
+                'required' => false,
+                'multiple' => true,
+                'expanded' => false,
+                'choice_label' => 'title',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'help' => 'Hold ctrl and click to select multiple properties.'
+            ]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $customerproperties = $form->get('properties')->getData();
             $customerRepository->save($customer, true);
-
+            foreach ($customer->getProperties() as $customerproperty) {
+                $customerproperty->setCustomer(null);
+                $propertyRepository->save($customerproperty, true);
+            }
+            if ($customerproperties) {
+                foreach ($customerproperties as $property) {
+                    $property->setCustomer($customer);
+                    $propertyRepository->save($property, true);
+                }
+            }
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('customer/edit.html.twig', [
             'customer' => $customer,
             'form' => $form,

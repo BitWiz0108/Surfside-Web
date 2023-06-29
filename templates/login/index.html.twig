@@ -26,7 +26,7 @@
                         <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control my-2" placeholder="Email">
                         <input type="password" id="password" name="_password" class="form-control my-2" placeholder="Password">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        <input type="hidden" name="_target_path" value="/user">
+                        <input type="hidden" name="_target_path" value="/home">
                         <br>
                         <button type="submit" class="btn btn-primary">Login</button>
                     </form>

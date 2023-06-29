@@ -3,9 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Customer;
+use App\Entity\Property;
+use App\Repository\PropertyRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CustomerType extends AbstractType
@@ -53,6 +57,12 @@ class CustomerType extends AbstractType
                 ],
             ])
             ->add('postalcode', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('calendarUrl', UrlType::class, [
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',

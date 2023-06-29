@@ -69,10 +69,11 @@ class CleanPhotoController extends AbstractController
     #[Route('/{id}', name: 'app_clean_photo_delete', methods: ['POST'])]
     public function delete(Request $request, CleanPhoto $cleanPhoto, CleanPhotoRepository $cleanPhotoRepository): Response
     {
+        $clean = $cleanPhoto->getClean();
         if ($this->isCsrfTokenValid('delete'.$cleanPhoto->getId(), $request->request->get('_token'))) {
             $cleanPhotoRepository->remove($cleanPhoto, true);
         }
 
-        return $this->redirectToRoute('app_clean_photo_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_clean_show', ['id' => $clean->getId()], Response::HTTP_SEE_OTHER);
     }
 }

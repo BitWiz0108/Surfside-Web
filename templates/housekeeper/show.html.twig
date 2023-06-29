@@ -7,58 +7,71 @@
                 <h4>Housekeeper</h4>
             </div>
             <div class="col-6 text-end">
-                <a href="{{ path('app_housekeeper_edit', {'id': housekeeper.id}) }}" class="btn btn-primary btn-sm">Edit</a> 
-                <a href="{{ path('app_housekeeper_index') }}" class="btn btn-secondary btn-sm">Back to list</a>
+                <a href="{{ path('app_housekeeper_index') }}" class="btn btn-secondary btn-sm">Back To List</a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-12">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td>{{ housekeeper.id }}</td>
-                        </tr>
-                        <tr>
-                            <th>First_name</th>
-                            <td>{{ housekeeper.firstName }}</td>
-                        </tr>
-                        <tr>
-                            <th>Last_name</th>
-                            <td>{{ housekeeper.lastName }}</td>
-                        </tr>
-                        <tr>
-                            <th>Address</th>
-                            <td>{{ housekeeper.address }}</td>
-                        </tr>
-                        <tr>
-                            <th>City</th>
-                            <td>{{ housekeeper.city }}</td>
-                        </tr>
-                        <tr>
-                            <th>State</th>
-                            <td>{{ housekeeper.state }}</td>
-                        </tr>
-                        <tr>
-                            <th>Postalcode</th>
-                            <td>{{ housekeeper.postalcode }}</td>
-                        </tr>
-                        <tr>
-                            <th>Created</th>
-                            <td>{{ housekeeper.created ? housekeeper.created|date('Y-m-d H:i:s') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Modified</th>
-                            <td>{{ housekeeper.modified ? housekeeper.modified|date('Y-m-d H:i:s') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Employee_id</th>
-                            <td>{{ housekeeper.employeeId }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card my-4">
+                    <div class="card-header text-start">
+                        <div class="row">
+                            <div class="col-6">Housekeeper Details</div>
+                            <div class="col-6 text-end"><a href="{{ path('app_housekeeper_edit', {'id': housekeeper.id}) }}" class="btn btn-primary btn-sm">Edit</a></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>{{ housekeeper.firstName }} {{ housekeeper.lastName }}</strong> ({{ housekeeper.employeeId }})<br>
+                                {{ housekeeper.address }}<br>
+                                {{ housekeeper.city }}, {{ housekeeper.state }} {{ housekeeper.postalcode }}
+                            </div>
+                            <div class="col-6">
+                                <strong>I-9 Front</strong>: {% if housekeeper.getINineFront() %}{{ housekeeper.getINineFront() }}{% else %}<small><a href="/uploads/i-9-paper-version.pdf">Download I-9 Here for your Employee to fill out.</a></small>{% endif %}<br>
+                                <strong>I-9 Back</strong>: {% if housekeeper.getINineBack() %}{{ housekeeper.getINineBack() }}{% else %}<small><a href="/uploads/i-9-paper-version.pdf">Download I-9 Here for your Employee to fill out.</a></small>{% endif %}<br>
+                                <strong>ID Front</strong>: {% if housekeeper.getIdFront() %}{{ housekeeper.getIdFront() }}{% else %}<small><span class="text-danger fst-italic">No front image of ID</span></small>{% endif %}<br>
+                                <strong>ID Back</strong>: {% if housekeeper.getIdBack() %}{{ housekeeper.getIdBack() }}{% else %}<small><span class="text-danger fst-italic">No back image of ID</span></small>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header text-start">Appointments</div>
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Property</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cleanhousekeeper in housekeeper.getCleanHousekeepers() %}
+                                <tr>
+                                    <td>{{ cleanhousekeeper.getClean().getScheduled()|date('Y-m-d h:i a') }}</td>
+                                    <td>{{ cleanhousekeeper.getClean().getProperty().getTitle() }}</td>
+                                    <td class="text-end">
+                                        <a href="/clean/{{ cleanhousekeeper.getClean().getId() }}">details</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                {{ include('housekeeper/_delete_form.html.twig') }}
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12 text-end">
+                <small><strong>Created:</strong> {{ housekeeper.created ? housekeeper.created|date('Y-m-d H:i:s') : '' }} <strong>Modified:</strong> {{ housekeeper.modified ? housekeeper.modified|date('Y-m-d H:i:s') : '' }}</small>
             </div>
         </div>
     </div>
-    {{ include('housekeeper/_delete_form.html.twig') }}
+    
 {% endblock %}

@@ -20,9 +20,9 @@ class CleanLinenType extends AbstractType
                 'class' => Linen::class,
                 'query_builder' => function (LinenRepository $lr) {
                     return $lr->createQueryBuilder('l')
+                        ->andWhere('l.units > 0')
                         ->orderBy('l.name', 'ASC');
                 },
-                'choice_label' => 'name',
                 'attr' => [
                     'class' => 'form-control',
                 ],
