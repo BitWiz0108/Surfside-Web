@@ -12,126 +12,137 @@
         </div>
         <div class="row my-4">
             <div class="col-12">
+                <small>
+                {% if includeinactive %}
+                    <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive=0">Do Not Include Inactive Customers</a>
+                {% else %}
+                    <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive=1">Include Inactive Customers</a>
+                {% endif %}
+                </small>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
                 <table class="table table-striped table-hover border border-2">
                     <thead>
                         <tr>
                             <th>Id <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'id' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>First Name <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'first_name' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=first_name&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=first_name&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Last Name <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'last_name' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=last_name&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=last_name&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Company <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'company' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=company&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=company&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Address <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'address' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=address&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=address&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>City <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'city' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=city&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=city&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>State <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'state' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=state&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=state&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Postalcode <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'postalcode' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=postalcode&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=postalcode&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Created <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'created' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=created&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Modified <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'modified' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/customer/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/customer/?currentpage={{ currentpage }}&sortfield=modified&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
@@ -141,17 +152,17 @@
                     <tbody>
                     {% for customer in customers %}
                         <tr>
-                            <td>{{ customer.id }}</td>
-                            <td>{{ customer.firstName }}</td>
-                            <td>{{ customer.lastName }}</td>
-                            <td>{{ customer.company }}</td>
-                            <td>{{ customer.address }}</td>
-                            <td>{{ customer.city }}</td>
-                            <td>{{ customer.state }}</td>
-                            <td>{{ customer.postalcode }}</td>
-                            <td>{{ customer.created ? customer.created|date('Y-m-d H:i:s') : '' }}</td>
-                            <td>{{ customer.modified ? customer.modified|date('Y-m-d H:i:s') : '' }}</td>
-                            <td class="text-end">
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.id }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.firstName }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.lastName }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.company }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.address }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.city }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.state }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.postalcode }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.created ? customer.created|date('Y-m-d H:i:s') : '' }}</td>
+                            <td {% if customer.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ customer.modified ? customer.modified|date('Y-m-d H:i:s') : '' }}</td>
+                            <td class="text-end {% if customer.isActive() == 0 %}bg-danger bg-opacity-10{% endif %}">
                                 <a href="{{ path('app_customer_show', {'id': customer.id}) }}">show</a> | 
                                 <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
                             </td>
@@ -182,13 +193,13 @@
                                 <nav aria-label="..." class="float-end">
                                     <ul class="pagination">
                                         <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">
-                                            <a class="page-link" href="/customer/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Previous</a>
+                                            <a class="page-link" href="/customer/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}&includeinactive={{ includeinactive }}">Previous</a>
                                         </li>
                                         {% for i in 1..numberpages %}
-                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/customer/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">{{ i }}</a></li>
+                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/customer/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}&includeinactive={{ includeinactive }}">{{ i }}</a></li>
                                         {% endfor %}
                                         <li class="page-item {% if numberpages == 1 or currentpage == numberpages %} disabled{% endif %}" >
-                                            <a class="page-link" href="/customer/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Next</a>
+                                            <a class="page-link" href="/customer/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}&includeinactive={{ includeinactive }}">Next</a>
                                         </li>
                                     </ul>
                                 </nav>

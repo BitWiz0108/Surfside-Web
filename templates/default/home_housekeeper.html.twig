@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+{% block title %}Home{% endblock %}	
+{% block body %}
+	<div class="container-fluid mb-4" data-controller="housekeeper">
+        <div class="row my-4">
+            <div class="col-12">
+                <h4>Housekeeper Home</h4>
+			</div>
+		</div>
+        <div class="row my-4">
+            <div class="col-12">
+                <div data-controller="housekeeper" data-positions="{{ positions }}"></div>
+                <div id="map" style="height:400px"></div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                {% for appointmenthousekeeper in nextappointments %}
+                <div class="card my-4 rounded shadow">
+                    <div class="card-body">
+                        <h5>{{ appointmenthousekeeper.getClean().getScheduled()|format_datetime('long') }}</h5>
+                        <span class="fw-bold">{{ appointmenthousekeeper.getClean().getProperty() }}</span> 
+                        {% if appointmenthousekeeper.getClean().getProperty().getLatitude() is not null and appointmenthousekeeper.getClean().getProperty().getLongitude() is not null and appointmenthousekeeper.getClean().getEnd() is null %}
+                            <a href="https://www.google.com/maps/dir/?api=1&destination={{ appointmenthousekeeper.getClean().getProperty().getLatitude() }},{{ appointmenthousekeeper.getClean().getProperty().getLongitude() }}" target="_blank"><i class="fas fa-car" title="Directions"></i> Directions</a>
+                        {% endif %}
+                        <br>
+                        {{ appointmenthousekeeper.getClean().getProperty().getAddress() }}<br>
+                        {{ appointmenthousekeeper.getClean().getProperty().getCity() }}, {{ appointmenthousekeeper.getClean().getProperty().getState() }} {{ appointmenthousekeeper.getClean().getProperty().getPostalcode() }}<br>
+                        <span class="fst-italic"><small>{{ appointmenthousekeeper.getClean().getNotes() }}</small></span><br>
+                        {% if appointmenthousekeeper.getClean().getStart() is null and appointmenthousekeeper.getClean().getEnd() is null and appointmenthousekeeper.getClean().getSuppliesClaimed() is not null %}
+                            <span id="doorcodebuttonwrapper"><button id="startCleanBtn" class="btn btn-outline-success btn-sm" data-action="click->housekeeper#getDoorCode" data-lat="{{ appointmenthousekeeper.getClean().getProperty().getLatitude() }}" data-lng="{{ appointmenthousekeeper.getClean().getProperty().getLongitude() }}" data-cleanid="{{ appointmenthousekeeper.getClean().getId() }}">Get Door Code</button></span>
+                        {% elseif appointmenthousekeeper.getClean().getStart() is not null and appointmenthousekeeper.getClean().getEnd() is null %}
+                            <span class="fw-bold">Door Code</span>: {{ appointmenthousekeeper.getClean().getProperty().getDoorCode() }}<br>
+                            <span class="text-success">Started {{ appointmenthousekeeper.getClean().getStart()|format_datetime('medium') }}</span><br>
+                            <button id="addCleanPhotoBtn" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCleanPhotoModal">Add Photos</button>  <a href="/clean/{{ appointmenthousekeeper.getClean().getId() }}/end" id="endCleanBtn" class="btn btn-outline-danger btn-sm text-decoration-none">Ready For Inspection</a>
+                        {% elseif appointmenthousekeeper.getClean().getEnd() is not null %}
+                            <span class="fw-bold text-success">Completed {{ appointmenthousekeeper.getClean().getEnd()|format_datetime('medium') }}</span>
+                        {% endif %}
+                        {% if appointmenthousekeeper.getClean().getCleanPhotos()|length > 0 %}
+                            <div class="container-fluid mt-4">
+                                <div class="row p-2">
+                                {% for photo in appointmenthousekeeper.getClean().getCleanPhotos() %}
+                                    <div class="col text-center">
+                                        <img src="{{ photo.getUrl() }}" height="100" class="border border-dark border-1"><br>
+                                        <small>{{ photo.getTitle() }}</small>
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+	</div>
+    <div class="modal fade" id="newCleanPhotoModal" tabindex="-1" aria-labelledby="newCleanPhotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCleanPhotoModalLabel">New Cleaning Appointment Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ include('clean_photo/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div> 
+    <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",['geometry']+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: "AIzaSyBoDwyIQ71otagNEGzzjdJ_q-HBn9LYXoY", v: "beta"});</script> 
+{% endblock %}

@@ -11,50 +11,73 @@ use App\Repository\PropertyRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/customer')]
 class CustomerController extends AbstractController
 {
     #[Route('/', name: 'app_customer_index', methods: ['GET'])]
     public function index(Request $request, CustomerRepository $customerRepository): Response
     {
+        $filters = [];
         $sortfield = ($request->query->has('sortfield')) ? $request->query->get('sortfield') : 'company';
         $sortdirection = ($request->query->has('sortdirection')) ? $request->query->get('sortdirection') : 'ASC';
         $currentpage = ($request->query->has('currentpage')) ? (int) $request->query->get('currentpage') : 1;
         $recordsperpage = ($request->query->has('recordsperpage')) ? (int) $request->query->get('recordsperpage') : 10;
-        $customers = $customerRepository->findBy([], [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $includeinactive = ($request->query->has('includeinactive')) ? $request->query->get('includeinactive') : 0;
+        if (!$includeinactive) {
+            $filters = ['active' => 1];
+        }
+        $customers = $customerRepository->findBy($filters, [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $customersscount = count($customerRepository->findBy($filters));
         $numberpages = (count($customers) > 0) ? ceil(count($customerRepository->findAll())/$recordsperpage) : 1;
         return $this->render('customer/index.html.twig', [
             'customers' => $customers,
             'numberpages' => $numberpages,
             'currentpage' => $currentpage,
-            'total' => count($customerRepository->findAll()),
+            'total' => $customersscount,
             'recordsperpage' => $recordsperpage,
             'sortfield' => $sortfield,
             'sortdirection' => $sortdirection,
+            'includeinactive' => $includeinactive,
         ]);
     }
 
     #[Route('/new', name: 'app_customer_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, CustomerRepository $customerRepository, PropertyRepository $propertyRepository): Response
+    public function new(Request $request, CustomerRepository $customerRepository, PropertyRepository $propertyRepository, UserRepository $userRepository): Response
     {
         $customer = new Customer();
         $form = $this->createForm(CustomerType::class, $customer)
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'multiple' => false,
-                'expanded' => false,
-                'query_builder' => function (UserRepository $ur) {
-                    return $ur->createQueryBuilder('u')
-                        ->orderBy('u.email', 'ASC');
-                },
-                'choice_label' => 'email',
-                'by_reference' => false,
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'mapped' => false,
                 'attr' => [
-                    'class' => 'form-select',
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'mapped' => false,
+                'invalid_message' => 'The password fields must match.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => [
+                    'label' => 'Password',
+                    'attr' => [
+                        'class' => 'form-control',
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'Repeat Password',
+                    'attr' => [
+                        'class' => 'form-control',
+                    ],
                 ],
             ])
             ->add('properties', EntityType::class, [
@@ -77,6 +100,14 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $customerproperties = $form->get('properties')->getData();
+            $email = $form->get('email')->getData();
+            $password = password_hash($form->get('password')->getData(), PASSWORD_BCRYPT);
+            $user = new User();
+            $user->setEmail($email);
+            $user->setPassword($password);
+            $user->setRoles(["ROLE_USER", "ROLE_CUSTOMER"]);
+            $userRepository->save($user, true);
+            $customer->setUser($user);
             $customerRepository->save($customer, true);
             if ($customerproperties) {
                 foreach ($customerproperties as $property) {

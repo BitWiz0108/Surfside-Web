@@ -10,6 +10,11 @@
         </div>
         <div class="row my-4">
             <div class="col-12">
+                <strong>Email</strong>: {{ housekeeper.getUser().getEmail() }}
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
                 {{ include('housekeeper/_form.html.twig', {'button_label': 'Update'}) }}
             </div>
         </div>

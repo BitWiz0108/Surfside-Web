@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use DateInterval;
+use DateTime;
 use App\Entity\Customer;
 use App\Entity\Property;
 use App\Entity\PropertyPhoto;
 use App\Form\PropertyType;
 use App\Form\PropertyPhotoType;
+use App\Repository\CleanRepository;
 use App\Repository\CleanHousekeeperRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\PropertyRepository;
@@ -22,28 +25,54 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/property')]
 class PropertyController extends AbstractController
 {
     public function __construct(private SluggerInterface $slugger, private PropertyPhotoRepository $propertyPhotoRepository) {}
 
     #[Route('/', name: 'app_property_index', methods: ['GET'])]
-    public function index(Request $request, PropertyRepository $propertyRepository): Response
+    public function index(Request $request, PropertyRepository $propertyRepository, CleanRepository $cleanRepository): Response
     {
+        $filters = [];
         $sortfield = ($request->query->has('sortfield')) ? $request->query->get('sortfield') : 'title';
         $sortdirection = ($request->query->has('sortdirection')) ? $request->query->get('sortdirection') : 'ASC';
         $currentpage = ($request->query->has('currentpage')) ? (int) $request->query->get('currentpage') : 1;
         $recordsperpage = ($request->query->has('recordsperpage')) ? (int) $request->query->get('recordsperpage') : 10;
-        $properties = $propertyRepository->findBy([], [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $includeinactive = ($request->query->has('includeinactive')) ? $request->query->get('includeinactive') : 0;
+        if (!$includeinactive) {
+            $filters = ['active' => 1];
+        }
+        $properties = $propertyRepository->findBy($filters, [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $propertiescount = count($propertyRepository->findBy($filters));
         $numberpages = (count($properties) > 0) ? ceil(count($propertyRepository->findAll())/$recordsperpage) : 1;
+        $positions = [];
+        $startDateTime = new DateTime();
+        $endDateTime = new DateTime();
+        $endDateTime->add(new DateInterval('PT72H')); 
+        foreach ($properties as $property) {
+            $greenCleans = $cleanRepository->createQueryBuilder('c')
+                ->andWhere('c.scheduled >= :start')
+                ->andWhere('c.scheduled < :end')
+                ->andWhere('c.property = :property')
+                ->setParameter('start', $startDateTime)
+                ->setParameter('end', $endDateTime)
+                ->setParameter('property', $property)
+                ->getQuery()
+                ->getResult()
+            ;
+            $positions[] = ['title' => $property->getTitle(), 'needsclean' => (count($greenCleans) > 0) ? true : false, 'location' => ['lat' => (float) $property->getLatitude(), 'lng' => (float) $property->getLongitude()]];
+        }
         return $this->render('property/index.html.twig', [
             'properties' => $properties,
             'numberpages' => $numberpages,
             'currentpage' => $currentpage,
-            'total' => count($propertyRepository->findAll()),
+            'total' => $propertiescount,
             'recordsperpage' => $recordsperpage,
             'sortfield' => $sortfield,
             'sortdirection' => $sortdirection,
+            'includeinactive' => $includeinactive,
+            'positions' => json_encode($positions),
         ]);
     }
 
@@ -140,7 +169,7 @@ class PropertyController extends AbstractController
             'property' => $property,
             'form' => $form,    
             'chart' => $chart, 
-            'totalcleans' => $totalcleans,       
+            'totalcleans' => $totalcleans,     
         ]);
     }
 

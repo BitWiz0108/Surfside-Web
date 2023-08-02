@@ -9,50 +9,73 @@ use App\Repository\HousekeeperRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/housekeeper')]
 class HousekeeperController extends AbstractController
 {
     #[Route('/', name: 'app_housekeeper_index', methods: ['GET'])]
     public function index(Request $request, HousekeeperRepository $housekeeperRepository): Response
     {
+        $filters = [];
         $sortfield = ($request->query->has('sortfield')) ? $request->query->get('sortfield') : 'last_name';
         $sortdirection = ($request->query->has('sortdirection')) ? $request->query->get('sortdirection') : 'ASC';
         $currentpage = ($request->query->has('currentpage')) ? (int) $request->query->get('currentpage') : 1;
         $recordsperpage = ($request->query->has('recordsperpage')) ? (int) $request->query->get('recordsperpage') : 10;
-        $housekeepers = $housekeeperRepository->findBy([], [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $includeinactive = ($request->query->has('includeinactive')) ? $request->query->get('includeinactive') : 0;
+        if (!$includeinactive) {
+            $filters = ['active' => 1];
+        }
+        $housekeepers = $housekeeperRepository->findBy($filters, [$sortfield => $sortdirection], $recordsperpage, ($currentpage-1)*$recordsperpage);
+        $housekeeperscount = count($housekeeperRepository->findBy($filters));
         $numberpages = (count($housekeepers) > 0) ? ceil(count($housekeeperRepository->findAll())/$recordsperpage) : 1;
         return $this->render('housekeeper/index.html.twig', [
             'housekeepers' => $housekeepers,
             'numberpages' => $numberpages,
             'currentpage' => $currentpage,
-            'total' => count($housekeeperRepository->findAll()),
+            'total' => $housekeeperscount,
             'recordsperpage' => $recordsperpage,
             'sortfield' => $sortfield,
             'sortdirection' => $sortdirection,
+            'includeinactive' => $includeinactive,
         ]);
     }
 
     #[Route('/new', name: 'app_housekeeper_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, HousekeeperRepository $housekeeperRepository): Response
+    public function new(Request $request, HousekeeperRepository $housekeeperRepository, UserRepository $userRepository): Response
     {
         $housekeeper = new Housekeeper();
         $form = $this->createForm(HousekeeperType::class, $housekeeper)
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'multiple' => false,
-                'expanded' => false,
-                'query_builder' => function (UserRepository $ur) {
-                    return $ur->createQueryBuilder('u')
-                        ->orderBy('u.email', 'ASC');
-                },
-                'choice_label' => 'email',
-                'by_reference' => false,
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'mapped' => false,
                 'attr' => [
-                    'class' => 'form-select',
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'mapped' => false,
+                'invalid_message' => 'The password fields must match.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => [
+                    'label' => 'Password',
+                    'attr' => [
+                        'class' => 'form-control',
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'Repeat Password',
+                    'attr' => [
+                        'class' => 'form-control',
+                    ],
                 ],
             ])
         ;
@@ -60,6 +83,10 @@ class HousekeeperController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $i9front = $form->get('i9front')->getData();
             $i9back = $form->get('i9back')->getData();
+            $idfront = $form->get('idfront')->getData();
+            $idback = $form->get('idback')->getData();
+            $email = $form->get('email')->getData();
+            $password = password_hash($form->get('password')->getData(), PASSWORD_BCRYPT);
             if ($i9front) {
                 $originalFilename = pathinfo($i9front->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $this->slugger->slug($originalFilename);
@@ -116,6 +143,12 @@ class HousekeeperController extends AbstractController
             $housekeeper->setINineBack('/uploads/images/'.$backnewFilename);
             $housekeeper->setIdFront('/uploads/images/'.$frontidnewFilename);
             $housekeeper->setIdBack('/uploads/images/'.$backidnewFilename);
+            $user = new User();
+            $user->setEmail($email);
+            $user->setPassword($password);
+            $user->setRoles(["ROLE_USER", "ROLE_HOUSEKEEPER"]);
+            $userRepository->save($user, true);
+            $housekeeper->setUser($user);
             $housekeeperRepository->save($housekeeper, true);
             return $this->redirectToRoute('app_housekeeper_index', [], Response::HTTP_SEE_OTHER);
         }

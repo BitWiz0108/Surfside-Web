@@ -26,14 +26,18 @@
                             <div class="col-6">
                                 {{ clean.property.getAddress() }}<br>
                                 {{ clean.property.getCity() }}, {{ clean.property.getState() }}  {{ clean.property.getPostalCode() }}
+                                
+                                <br><span class="fw-bold">Door Code</span>: {% if is_granted('ROLE_ADMIN') %}{{ clean.property.getDoorCode() }}{% else %}****{% endif %}
+                                
                                 <br><br>
                                 <span class="fw-bold">Housekeeper(s)</span>:<br>
                                 {% for cleanhousekeeper in clean.getCleanHousekeepers() %}
                                     {{ cleanhousekeeper.getHousekeeper().getFirstName() }} {{ cleanhousekeeper.getHousekeeper().getLastName() }}{% if not loop.last %}, {% endif %}
                                 {% endfor %}
                                 <br><br>
-                                <span class="fw-bold">Date/Time Started</span>: {{ clean.start ? clean.start|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Not started</span>' }}<br>
-                                <span class="fw-bold">Date/Time Finished</span>: {{ clean.end ? clean.end|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Not finished</span>' }}
+                                <span class="fw-bold">Supplies Claimed</span>: {{ clean.suppliesClaimed ? clean.suppliesClaimed|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Supplies not claimed</span>' }}<br>
+                                <span class="fw-bold">Started</span>: {{ clean.start ? clean.start|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Not started</span>' }}<br>
+                                <span class="fw-bold">Finished</span>: {{ clean.end ? clean.end|date('Y-m-d H:i') : '<span class="text-danger fst-italic">Not finished</span>' }}
                                 <br><br>
                                 <span class="fw-bold">Notes:</span><br>
                                 {{ clean.notes }}
@@ -52,7 +56,10 @@
             </div>
         </div>
         <div class="row my-4">
-            <div class="col-6">
+            <div class="col-4 text-center">
+                <img src="{{ qrcodepath }}" />
+            </div>
+            <div class="col-4">
                 <div class="card">
                     <div class="card-header text-start">
                         <div class="row">
@@ -90,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-header text-start">
                         <div class="row">
@@ -178,9 +185,11 @@
                 </div>
             </div>
         </div>
-        <div class="row my-4">
-            <div class="col-12">{{ include('clean/_delete_form.html.twig') }}</div>
-        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="row my-4">
+                <div class="col-12">{{ include('clean/_delete_form.html.twig') }}</div>
+            </div>
+        {% endif %}
         <div class="row my-4">
             <div class="col-12 text-end">
                 <small><span class="fw-bold">Created</span>: {{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }} <span class="fw-bold">Modified</span>: {{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</small>

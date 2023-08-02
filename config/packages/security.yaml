@@ -23,6 +23,13 @@ security:
                 enable_csrf: true
             logout:
                 path: app_logout                
+            remember_me:
+                secret:   '%kernel.secret%' # required
+                lifetime: 604800 # 1 week in seconds
+                # by default, the feature is enabled by checking a
+                # checkbox in the login form (see below), uncomment the
+                # following line to always enable it.
+                always_remember_me: true                
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -32,8 +39,17 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/customer, roles: ROLE_ADMIN }
+        - { path: ^/housekeeper, roles: ROLE_ADMIN }
+        - { path: ^/supply, roles: ROLE_ADMIN }
+        - { path: ^/linen, roles: ROLE_ADMIN }
+        - { path: ^/property, roles: ROLE_ADMIN }
+        - { path: ^/clean, roles: ROLE_HOUSEKEEPER }
+
+    role_hierarchy:
+        ROLE_HOUSEKEEPER: ROLE_USER
+        ROLE_CUSTOMER: ROLE_USER
+        ROLE_ADMIN: [ROLE_HOUSEKEEPER, ROLE_CUSTOMER]
 
 when@test:
     security:

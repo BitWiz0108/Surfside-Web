@@ -75,18 +75,6 @@
                                 {% endif %}
                                 </span>
                             </th>
-                            <th>Notes <span clsas="text-blue fw-bold">
-                                {% if sortfield == 'notes' %} 
-                                    {% if sortdirection == 'ASC' %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
-                                    {% else %}
-                                        <a href="/clean/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
-                                    {% endif %}
-                                {% else %} 
-                                    <a href="/clean/?currentpage={{ currentpage }}&sortfield=notes&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
-                                {% endif %}
-                                </span>
-                            </th>
                             <th>Created <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'created' %} 
                                     {% if sortdirection == 'ASC' %}
@@ -122,7 +110,6 @@
                             <td>{{ clean.scheduled ? clean.scheduled|date('Y-m-d h:i a') : '' }}</td>
                             <td>{{ clean.start ? clean.start|date('Y-m-d h:i a') : '' }}</td>
                             <td>{{ clean.end ? clean.end|date('Y-m-d h:i a') : '' }}</td>
-                            <td>{{ clean.notes }}</td>
                             <td>{{ clean.created ? clean.created|date('Y-m-d H:i:s') : '' }}</td>
                             <td>{{ clean.modified ? clean.modified|date('Y-m-d H:i:s') : '' }}</td>
                             <td class="text-end">
@@ -131,7 +118,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="9" class="text-danger">No records found</td>
+                            <td colspan="8" class="text-danger">No records found</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -151,7 +138,7 @@
                                 {% endif %}
                                  of {{ total }}
                             </td>
-                            <td colspan="5">
+                            <td colspan="4">
                                 <nav aria-label="..." class="float-end">
                                     <ul class="pagination">
                                         <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">

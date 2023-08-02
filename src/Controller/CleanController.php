@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Clean;
 use App\Entity\CleanHousekeeper;
 use App\Entity\CleanLinen;
@@ -20,6 +21,13 @@ use App\Repository\CleanPhotoRepository;
 use App\Repository\CleanSupplyRepository;
 use App\Repository\LinenRepository;
 use App\Repository\SupplyRepository;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +36,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+#[IsGranted('ROLE_HOUSEKEEPER')]
 #[Route('/clean')]
 class CleanController extends AbstractController
 {
@@ -106,6 +115,7 @@ class CleanController extends AbstractController
                     $this->addFlash('danger', 'Error uploading image.');
                 }
             }
+            $cleanPhoto->setTitle($form->get('title')->getData());
             $cleanPhoto->setClean($clean);
             $cleanPhoto->setUrl('/uploads/images/'.$newFilename);
             $this->cleanPhotoRepository->save($cleanPhoto, true);
@@ -126,11 +136,32 @@ class CleanController extends AbstractController
             $this->cleanSupplyRepository->save($cleanSupply, true);
             $supplyRepository->save($supply, true);
         }
+        $qrcode = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data('http://clean/home_housekeeper/'.$clean->getId())
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(200)
+            ->margin(10)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->logoPath($this->getParameter('images_directory').'/SurfsideWebElement450.png')
+            ->logoResizeToWidth(50)
+            ->logoPunchoutBackground(true)
+            ->labelText($clean->getProperty().' '.$clean->getScheduled()->format('Y-m-d h:i a'))
+            ->labelFont(new NotoSans(8))
+            ->labelAlignment(new LabelAlignmentCenter())
+            ->validateResult(false)
+            ->build()
+        ;
+        $qrcodepath = $this->getParameter('images_directory').'/'.$clean->getId().'-qrcode.png';
+        $qrcode->saveToFile($qrcodepath);
         return $this->render('clean/show.html.twig', [
             'clean' => $clean,
             'form' => $form,
             'cleanlinenform' => $cleanlinenform,
             'cleansupplyform' => $cleansupplyform,
+            'qrcodepath' => substr($qrcodepath, 35),  
         ]);
     }
 
@@ -157,5 +188,23 @@ class CleanController extends AbstractController
         }
 
         return $this->redirectToRoute('app_clean_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{cleanid}/start', name: 'app_clean_start', methods: ['GET', 'POST'])]
+    public function start(Request $request, $cleanid, CleanRepository $cleanRepository): Response
+    {
+        $clean = $cleanRepository->find($cleanid);
+        $clean->setStart(new DateTime());
+        $cleanRepository->save($clean, true);
+        return $this->redirectToRoute('app_home_housekeeper', ['cleanid' => $cleanid]); 
+    }
+
+    #[Route('/{cleanid}/end', name: 'app_clean_end', methods: ['GET', 'POST'])]
+    public function end(Request $request, $cleanid, CleanRepository $cleanRepository): Response
+    {
+        $clean = $cleanRepository->find($cleanid);
+        $clean->setEnd(new DateTime());
+        $cleanRepository->save($clean, true);
+        return $this->redirectToRoute('app_home_housekeeper', ['cleanid' => $cleanid]); 
     }
 }

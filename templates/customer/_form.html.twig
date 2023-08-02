@@ -10,9 +10,15 @@
         {% if button_label == 'Save' %}
         <div class="row my-2">
             <div class="col-12">
-                {{ form_label(form.user) }}
-                {{ form_widget(form.user) }}
-                <small>Create a user to assign as this customer <a href="/user/new">here</a>.</small>
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+                <small>{{ form_help(form.email) }}</small>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12">
+                {{ form_widget(form.password) }}
+                <small>{{ form_help(form.password) }}</small>
             </div>
         </div>
         {% endif %}
@@ -74,6 +80,14 @@
                 {{ form_widget(form.properties) }}
                 <small>{{ form_help(form.properties) }}</small>
             </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-3">
+                {{ form_label(form.active) }}
+                {{ form_widget(form.active) }}
+                <small>{{ form_help(form.active) }}</small>
+            </div>
+            <div class="col-9"></div>
         </div>
         <div class="row my-2">
             <div class="col-12 text-end">

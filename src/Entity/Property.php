@@ -88,6 +88,9 @@ class Property
     #[ORM\Column(nullable: true)]
     private ?float $cost = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $active = null;
+
     public function __construct()
     {
         $this->propertyPhotos = new ArrayCollection();
@@ -96,7 +99,7 @@ class Property
 
     public function __toString()
     {
-        return $this->title;
+        return !is_null($this->title) ? $this->title : $this->address;
     }
 
     public function getId(): ?int
@@ -424,6 +427,18 @@ class Property
     public function setCost(?float $cost): static
     {
         $this->cost = $cost;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(?bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

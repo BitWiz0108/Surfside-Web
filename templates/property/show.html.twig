@@ -29,7 +29,8 @@
                                 {{ property.city }}, {{ property.state }} {{ property.postalcode }}<br>
                                 {{ property.latitude }} : {{ property.longitude }}<br>
                                 <strong>Sq. Ft.</strong> {{ property.squareFeet }}<br>
-                                <strong>Cost/Appointment</strong> {% if property.cost %} ${{ property.cost }} {% else %}<span class="text-danger fst-italic">No Price Set</span>{% endif %}
+                                <strong>Cost/Appointment</strong> {% if property.cost %} ${{ property.cost }} {% else %}<span class="text-danger fst-italic">No Price Set</span>{% endif %}<br>
+                                <strong>Status</strong>: {% if property.isActive() %}<span class="text-success fw-bold">Active</span>{% else %}<span class="text-danger fw-bold">Inactive</span>{% endif %}<br>
                             </div>
                             <div class="col-3">
                                 <strong>Bedrooms</strong> {{ property.bedrooms }}<br>

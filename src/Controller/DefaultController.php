@@ -4,19 +4,34 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\Clean;
+use App\Entity\CleanPhoto;
+use App\Form\CleanPhotoType;
 use App\Repository\CleanRepository;
+use App\Repository\CleanPhotoRepository;
+use App\Repository\CleanHousekeeperRepository;
 use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
 class DefaultController extends AbstractController
 {
+    public function __construct(private Security $security, private SluggerInterface $slugger) {}
+
     #[Route('/', name: 'app_default')]
     public function index(): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_home');
+        } elseif ($this->security->isGranted('ROLE_HOUSEKEEPER')){
+            return $this->redirectToRoute('app_home_housekeeper');
+        }
         return $this->render('default/index.html.twig', []);
     }
 
@@ -40,20 +55,7 @@ class DefaultController extends AbstractController
         ;
         $colors = ['blueviolet', 'indianred', 'cornflowerblue', 'darkmagenta', 'darkolivegreen', 'cornsilk', 'gold', 'ghostwhite', 'indianred', 'honeydew', 'lavender', 'aliceblue'];
         $i = 0;
-        // $jantotal = $febtotal = $martotal = $aprtotal = $maytotal = $juntotal = $jultotal = $augtotal = $septtotal = $octtotal = $novtotal = $dectotal = 0;
         foreach ($chartData as $data) {
-            // $jantotal += $data[1]?$data[1]:0;
-            // $febtotal += $data[3]?$data[3]:0;
-            // $martotal += $data[5]?$data[5]:0;
-            // $aprtotal += $data[7]?$data[7]:0;
-            // $maytotal += $data[9]?$data[9]:0;
-            // $juntotal += $data[11]?$data[11]:0;
-            // $jultotal += $data[13]?$data[13]:0;
-            // $augtotal += $data[15]?$data[15]:0;
-            // $septtotal += $data[17]?$data[17]:0;
-            // $octtotal += $data[19]?$data[19]:0;
-            // $novtotal += $data[21]?$data[21]:0;
-            // $dectotal += $data[23]?$data[23]:0;
             $dataset = [
                 'label' => $data["title"],
                 'backgroundColor' => $colors[$i],
@@ -64,14 +66,6 @@ class DefaultController extends AbstractController
             $datasets[] = $dataset;
             $i++;
         }
-        // $dataset = [
-        //     'label' => 'Total',
-        //     'backgroundColor' => $colors[$i],
-        //     'borderColor' => $colors[$i],
-        //     'borderWidth' => 1,
-        //     'data' => [$jantotal, $febtotal, $martotal, $aprtotal, $maytotal, $juntotal, $jultotal, $augtotal, $septtotal, $octtotal, $novtotal, $dectotal],
-        // ];
-        // $datasets[] = $dataset;
         $chart = $chartBuilder->createChart(Chart::TYPE_BAR);
         $chart->setData([
             'labels' => ['Januray', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -94,6 +88,93 @@ class DefaultController extends AbstractController
             'todaysappointments' => $todaysappointments,
             'datasets' => $datasets,
             'chart' => $chart,
+        ]);
+    }
+
+    #[Route('/home_housekeeper/{cleanid}', name: 'app_home_housekeeper', defaults: ["cleanid" => null], methods: ['GET', 'POST'])]
+    public function home_housekeeper($cleanid, Request $request, CleanRepository $cleanRepository, CleanHousekeeperRepository $cleanHousekeeperRepository, CleanPhotoRepository $cleanPhotoRepository) 
+    {
+        $user = $this->getUser();
+        $currentdate = new DateTime(date("Y-m-d"));
+        if (!is_null($cleanid)) {
+            $clean = $cleanRepository->find($cleanid);
+        } else {
+            $clean = null;
+        }
+        if (is_null($cleanid)) {
+            $nextappointments = $cleanHousekeeperRepository->createQueryBuilder('ch')
+                ->leftJoin('ch.housekeeper', 'h')
+                ->leftJoin('ch.clean', 'c')
+                ->andWhere('h.user = :user')
+                ->andWhere('c.scheduled >= :currentdate')
+                ->orderBy('c.scheduled', 'ASC')
+                ->setParameter('currentdate', $currentdate)
+                ->setParameter('user', $user)
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult()
+            ;
+        } else {
+            $nextappointments = $cleanHousekeeperRepository->createQueryBuilder('ch')
+                ->leftJoin('ch.housekeeper', 'h')
+                ->leftJoin('ch.clean', 'c')
+                ->andWhere('h.user = :user')
+                ->andWhere('c.id = :cleanid')
+                ->setParameter('user', $user)
+                ->setParameter('cleanid', $cleanid)
+                ->getQuery()
+                ->getResult()
+            ;
+            if (is_null($nextappointments) || empty($nextappointments)) {
+                $this->addFlash('danger', 'You are not assigned to this appointment. Did you scan the correct label? Please try again.');
+            } else {
+                $today = new DateTime();
+                $clean = $cleanRepository->find($cleanid);
+                $clean->setSuppliesClaimed($today);
+                $cleanRepository->save($clean, true);
+                $nextappointments = $cleanHousekeeperRepository->createQueryBuilder('ch')
+                    ->leftJoin('ch.housekeeper', 'h')
+                    ->leftJoin('ch.clean', 'c')
+                    ->andWhere('h.user = :user')
+                    ->andWhere('c.id = :cleanid')
+                    ->setParameter('user', $user)
+                    ->setParameter('cleanid', $cleanid)
+                    ->getQuery()
+                    ->getResult()
+                ;
+            }
+        }
+        $positions = [];
+        foreach ($nextappointments as $appointment) {
+            $positions[] = ['title' => $appointment->getClean()->getProperty()->getTitle(), 'location' => ['lat' => (float) $appointment->getClean()->getProperty()->getLatitude(), 'lng' => (float) $appointment->getClean()->getProperty()->getLongitude()]];
+        }
+        $cleanPhoto = new CleanPhoto();
+        $form = $this->createForm(CleanPhotoType::class, $cleanPhoto);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('file')->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Error uploading image.');
+                }
+            }
+            $cleanPhoto->setTitle($form->get('title')->getData());
+            $cleanPhoto->setClean($clean);
+            $cleanPhoto->setUrl('/uploads/images/'.$newFilename);
+            $cleanPhotoRepository->save($cleanPhoto, true);
+        }
+        return $this->render('default/home_housekeeper.html.twig', [
+            'nextappointments' => $nextappointments,
+            'positions' => json_encode($positions),
+            'form' => $form,
         ]);
     }
 }

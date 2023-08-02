@@ -134,6 +134,14 @@
             <div class="col-9"></div>
         </div>
         <div class="row my-2">
+            <div class="col-3">
+                {{ form_label(form.active) }}
+                {{ form_widget(form.active) }}
+                <small>{{ form_help(form.active) }}</small>
+            </div>
+            <div class="col-9"></div>
+        </div>
+        <div class="row my-2">
             <div class="col-12 text-end">
                 <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
             </div>

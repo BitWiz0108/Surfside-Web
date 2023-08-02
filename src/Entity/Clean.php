@@ -52,6 +52,9 @@ class Clean
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $inspectionNotes = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $suppliesClaimed = null;
+
     public function __construct()
     {
         $this->cleanPhotos = new ArrayCollection();
@@ -277,6 +280,18 @@ class Clean
     public function setInspectionNotes(?string $inspectionNotes): static
     {
         $this->inspectionNotes = $inspectionNotes;
+
+        return $this;
+    }
+
+    public function getSuppliesClaimed(): ?\DateTimeInterface
+    {
+        return $this->suppliesClaimed;
+    }
+
+    public function setSuppliesClaimed(?\DateTimeInterface $suppliesClaimed): static
+    {
+        $this->suppliesClaimed = $suppliesClaimed;
 
         return $this;
     }

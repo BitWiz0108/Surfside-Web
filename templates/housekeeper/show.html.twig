@@ -24,7 +24,9 @@
                             <div class="col-6">
                                 <strong>{{ housekeeper.firstName }} {{ housekeeper.lastName }}</strong> ({{ housekeeper.employeeId }})<br>
                                 {{ housekeeper.address }}<br>
-                                {{ housekeeper.city }}, {{ housekeeper.state }} {{ housekeeper.postalcode }}
+                                {{ housekeeper.city }}, {{ housekeeper.state }} {{ housekeeper.postalcode }}<br>
+
+                                <strong>Status</strong>: {% if housekeeper.isActive() %}<span class="text-success fw-bold">Active</span>{% else %}<span class="text-danger fw-bold">Inactive</span>{% endif %}<br>
                             </div>
                             <div class="col-6">
                                 <strong>I-9 Front</strong>: {% if housekeeper.getINineFront() %}{{ housekeeper.getINineFront() }}{% else %}<small><a href="/uploads/i-9-paper-version.pdf">Download I-9 Here for your Employee to fill out.</a></small>{% endif %}<br>

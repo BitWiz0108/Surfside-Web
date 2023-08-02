@@ -3,9 +3,26 @@
 {% block body %}
     <div class="container-fluid">
         <div class="row my-4">
-            <div class="col-6">
+            <div class="col-12">
                 <h4>Properties</h4>
-                </div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-12">
+                <div data-controller="property" data-positions="{{ positions }}"></div>
+                <div id="map" style="height:400px"></div>
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col-6">
+                <small>
+                {% if includeinactive %}
+                    <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive=0">Do Not Include Inactive Properties</a>
+                {% else %}
+                    <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive=1">Include Inactive Properties</a>
+                {% endif %}
+                </small>
+            </div>
             <div class="col-6 text-end">
                 <a href="{{ path('app_property_new') }}" class="btn btn-primary btn-sm">Create New</a>
             </div>
@@ -18,72 +35,72 @@
                             <th>Id <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'id' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=id&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Title <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'title' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=title&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=title&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Address <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'address' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=address&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=address&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>City <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'city' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=city&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=city&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>State <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'state' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=state&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=state&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
                             <th>Postalcode <span clsas="text-blue fw-bold">
                                 {% if sortfield == 'postalcode' %} 
                                     {% if sortdirection == 'ASC' %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC"><i class="fa-solid fa-arrow-down"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=DESC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-down"></i></a>
                                     {% else %}
-                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC"><i class="fa-solid fa-arrow-up"></i></a>
+                                        <a href="/property/?currentpage={{ currentpage }}&sortfield={{ sortfield }}&sortdirection=ASC&includeinactive={{ includeinactive }}"><i class="fa-solid fa-arrow-up"></i></a>
                                     {% endif %}
                                 {% else %} 
-                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=postalcode&sortdirection=DESC" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
+                                    <a href="/property/?currentpage={{ currentpage }}&sortfield=postalcode&sortdirection=DESC&includeinactive={{ includeinactive }}" class="text-secondary" style="--bs-text-opacity: .5;"><i class="fa-solid fa-sort"></i></a>
                                 {% endif %}
                                 </span>
                             </th>
@@ -93,13 +110,13 @@
                     <tbody>
                     {% for property in properties %}
                         <tr>
-                            <td>{{ property.id }}</td>
-                            <td>{{ property.title }}</td>
-                            <td>{{ property.address }}</td>
-                            <td>{{ property.city }}</td>
-                            <td>{{ property.state }}</td>
-                            <td>{{ property.postalcode }}</td>
-                            <td class="text-end">
+                            <td {% if property.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ property.id }}</td>
+                            <td {% if property.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ property.title }}</td>
+                            <td {% if property.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ property.address }}</td>
+                            <td {% if property.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ property.city }}</td>
+                            <td {% if property.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ property.state }}</td>
+                            <td {% if property.isActive() == 0 %} class="bg-danger bg-opacity-10"{% endif %}>{{ property.postalcode }}</td>
+                            <td class="text-end {% if property.isActive() == 0 %} bg-danger bg-opacity-10{% endif %}">
                                 <a href="{{ path('app_property_show', {'id': property.id}) }}">show</a> | 
                                 <a href="{{ path('app_property_edit', {'id': property.id}) }}">edit</a>
                             </td>
@@ -130,13 +147,13 @@
                                 <nav aria-label="..." class="float-end">
                                     <ul class="pagination">
                                         <li class="page-item {% if currentpage == 1 %} disabled{% endif %}">
-                                            <a class="page-link" href="/property/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Previous</a>
+                                            <a class="page-link" href="/property/?currentpage={{ currentpage-1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}&includeinactive={{ includeinactive }}">Previous</a>
                                         </li>
                                         {% for i in 1..numberpages %}
-                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/property/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">{{ i }}</a></li>
+                                            <li class="page-item {% if i == currentpage %} active{% endif %}" {% if i == currentpage %}aria-current="page"{% endif %}><a class="page-link" href="/property/?currentpage={{ i }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}&includeinactive={{ includeinactive }}">{{ i }}</a></li>
                                         {% endfor %}
                                         <li class="page-item {% if numberpages == 1 or currentpage == numberpages %} disabled{% endif %}" >
-                                            <a class="page-link" href="/property/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}">Next</a>
+                                            <a class="page-link" href="/property/?currentpage={{ currentpage+1 }}&sortfield={{ sortfield }}&sortdirection={{ sortdirection }}&includeinactive={{ includeinactive }}">Next</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -147,4 +164,6 @@
             </div>
         </div>
     </div>
+    <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+        ({key: "AIzaSyBoDwyIQ71otagNEGzzjdJ_q-HBn9LYXoY", v: "beta"});</script>   
 {% endblock %}

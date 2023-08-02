@@ -52,9 +52,17 @@ class Customer
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $calendarUrl = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $active = null;
+
     public function __construct()
     {
         $this->properties = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return !is_null($this->company) ? $this->company : $this->first_name.' '.$this->last_name;
     }
 
     public function getId(): ?int
@@ -220,6 +228,18 @@ class Customer
     public function setCalendarUrl(?string $calendarUrl): static
     {
         $this->calendarUrl = $calendarUrl;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(?bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }
